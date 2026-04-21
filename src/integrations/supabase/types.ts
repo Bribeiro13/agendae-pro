@@ -375,10 +375,12 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      confirmar_pagamento_pix: { Args: { _txid: string }; Returns: string }
       criar_organizacao_com_dono: {
         Args: { _nome: string; _slug: string; _telefone?: string }
         Returns: string
       }
+      expirar_pix_vencidos: { Args: never; Returns: number }
       has_role: {
         Args: {
           _organizacao_id: string
@@ -390,6 +392,18 @@ export type Database = {
       is_membro: {
         Args: { _organizacao_id: string; _user_id: string }
         Returns: boolean
+      }
+      reservar_horario_publico: {
+        Args: {
+          _cliente_email: string
+          _cliente_nome: string
+          _cliente_telefone: string
+          _inicio: string
+          _organizacao_id: string
+          _profissional_id: string
+          _servico_id: string
+        }
+        Returns: Json
       }
       tem_conflito_horario: {
         Args: {
