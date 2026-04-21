@@ -375,6 +375,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      criar_organizacao_com_dono: {
+        Args: { _nome: string; _slug: string; _telefone?: string }
+        Returns: string
+      }
       has_role: {
         Args: {
           _organizacao_id: string

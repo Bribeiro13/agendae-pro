@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS "Qualquer autenticado cria organização" ON public.organizacoes;
