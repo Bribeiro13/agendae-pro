@@ -9,7 +9,8 @@ import {
   addDays, addWeeks, endOfDay, endOfWeek, format, isSameDay, startOfDay, startOfWeek, subDays, subWeeks,
 } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { ChevronLeft, ChevronRight, CalendarRange } from "lucide-react";
+import { ChevronLeft, ChevronRight, CalendarRange, Plus } from "lucide-react";
+import NovoAgendamentoDialog from "@/components/agenda/NovoAgendamentoDialog";
 
 type Vista = "dia" | "semana";
 
@@ -27,7 +28,7 @@ interface Agendamento {
 
 const HORA_INICIO = 8;
 const HORA_FIM = 21;
-const SLOT_PX = 60; // 1h = 60px
+const SLOT_PX = 60;
 
 const corPorStatus = (s: string) => {
   switch (s) {
@@ -46,6 +47,8 @@ export default function Agenda() {
   const [refDate, setRefDate] = useState<Date>(new Date());
   const [items, setItems] = useState<Agendamento[]>([]);
   const [loading, setLoading] = useState(false);
+  const [novoAberto, setNovoAberto] = useState(false);
+  const [novoSugerido, setNovoSugerido] = useState<Date | undefined>();
 
   const intervalo = useMemo(() => {
     if (vista === "dia") return { ini: startOfDay(refDate), fim: endOfDay(refDate) };
@@ -60,21 +63,21 @@ export default function Agenda() {
     return Array.from({ length: 7 }, (_, i) => addDays(intervalo.ini, i));
   }, [intervalo, vista]);
 
-  useEffect(() => {
+  const carregar = async () => {
     if (!org) return;
     setLoading(true);
-    (async () => {
-      const { data } = await supabase
-        .from("agendamentos")
-        .select("id, inicio, fim, status, cliente_id, profissional_id, clientes(nome), servicos(nome), profissionais(nome)")
-        .eq("organizacao_id", org.id)
-        .gte("inicio", intervalo.ini.toISOString())
-        .lte("inicio", intervalo.fim.toISOString())
-        .order("inicio");
-      setItems((data ?? []) as unknown as Agendamento[]);
-      setLoading(false);
-    })();
-  }, [org, intervalo]);
+    const { data } = await supabase
+      .from("agendamentos")
+      .select("id, inicio, fim, status, cliente_id, profissional_id, clientes(nome), servicos(nome), profissionais(nome)")
+      .eq("organizacao_id", org.id)
+      .gte("inicio", intervalo.ini.toISOString())
+      .lte("inicio", intervalo.fim.toISOString())
+      .order("inicio");
+    setItems((data ?? []) as unknown as Agendamento[]);
+    setLoading(false);
+  };
+
+  useEffect(() => { carregar(); /* eslint-disable-next-line */ }, [org, intervalo]);
 
   const navegar = (dir: -1 | 1) => {
     setRefDate((d) => (vista === "dia" ? (dir === 1 ? addDays(d, 1) : subDays(d, 1)) : (dir === 1 ? addWeeks(d, 1) : subWeeks(d, 1))));
@@ -85,6 +88,13 @@ export default function Agenda() {
   const labelPeriodo = vista === "dia"
     ? format(refDate, "dd 'de' MMMM, yyyy", { locale: ptBR })
     : `${format(intervalo.ini, "dd MMM", { locale: ptBR })} – ${format(intervalo.fim, "dd MMM, yyyy", { locale: ptBR })}`;
+
+  const abrirNovoEmSlot = (dia: Date, hora: number) => {
+    const d = new Date(dia);
+    d.setHours(hora, 0, 0, 0);
+    setNovoSugerido(d);
+    setNovoAberto(true);
+  };
 
   return (
     <div className="mx-auto max-w-7xl space-y-4 animate-fade-in">
@@ -111,11 +121,13 @@ export default function Agenda() {
               <TabsTrigger value="semana">Semana</TabsTrigger>
             </TabsList>
           </Tabs>
+          <Button variant="gradient" size="sm" onClick={() => { setNovoSugerido(undefined); setNovoAberto(true); }}>
+            <Plus className="h-4 w-4" /> Novo
+          </Button>
         </div>
       </header>
 
       <Card className="overflow-hidden border-border/70 shadow-soft">
-        {/* Cabeçalho dos dias */}
         <div className="grid border-b border-border bg-secondary/40"
           style={{ gridTemplateColumns: `64px repeat(${dias.length}, minmax(0, 1fr))` }}>
           <div />
@@ -134,10 +146,8 @@ export default function Agenda() {
           })}
         </div>
 
-        {/* Grade de horários */}
         <div className="relative grid"
           style={{ gridTemplateColumns: `64px repeat(${dias.length}, minmax(0, 1fr))` }}>
-          {/* Coluna de horas */}
           <div>
             {horas.map((h) => (
               <div key={h} className="relative h-[60px] border-b border-border pr-2 text-right">
@@ -148,13 +158,13 @@ export default function Agenda() {
             ))}
           </div>
 
-          {/* Colunas de dias */}
           {dias.map((dia) => {
             const eventosDoDia = items.filter((a) => isSameDay(new Date(a.inicio), dia));
             return (
               <div key={dia.toISOString()} className="relative border-l border-border">
                 {horas.map((h) => (
-                  <div key={h} className="h-[60px] border-b border-border" />
+                  <button key={h} onClick={() => abrirNovoEmSlot(dia, h)}
+                    className="block h-[60px] w-full border-b border-border transition-colors hover:bg-secondary/40" />
                 ))}
                 {eventosDoDia.map((a) => {
                   const ini = new Date(a.inicio);
@@ -180,7 +190,6 @@ export default function Agenda() {
         </div>
       </Card>
 
-      {/* Legenda */}
       <div className="flex flex-wrap gap-2 text-xs">
         {[
           { l: "Pago", cls: "bg-event-green" },
@@ -195,6 +204,13 @@ export default function Agenda() {
         ))}
         {loading && <span className="text-muted-foreground">Carregando...</span>}
       </div>
+
+      <NovoAgendamentoDialog
+        open={novoAberto}
+        onOpenChange={setNovoAberto}
+        inicioSugerido={novoSugerido}
+        onCriado={carregar}
+      />
     </div>
   );
 }
