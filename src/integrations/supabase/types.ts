@@ -14,16 +14,399 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      agendamentos: {
+        Row: {
+          atualizado_em: string
+          cliente_id: string
+          criado_em: string
+          fim: string
+          id: string
+          inicio: string
+          lembrete_enviado: boolean
+          observacoes: string | null
+          organizacao_id: string
+          preco_total: number
+          profissional_id: string
+          servico_id: string
+          status: Database["public"]["Enums"]["status_agendamento"]
+          valor_sinal: number
+        }
+        Insert: {
+          atualizado_em?: string
+          cliente_id: string
+          criado_em?: string
+          fim: string
+          id?: string
+          inicio: string
+          lembrete_enviado?: boolean
+          observacoes?: string | null
+          organizacao_id: string
+          preco_total: number
+          profissional_id: string
+          servico_id: string
+          status?: Database["public"]["Enums"]["status_agendamento"]
+          valor_sinal?: number
+        }
+        Update: {
+          atualizado_em?: string
+          cliente_id?: string
+          criado_em?: string
+          fim?: string
+          id?: string
+          inicio?: string
+          lembrete_enviado?: boolean
+          observacoes?: string | null
+          organizacao_id?: string
+          preco_total?: number
+          profissional_id?: string
+          servico_id?: string
+          status?: Database["public"]["Enums"]["status_agendamento"]
+          valor_sinal?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agendamentos_cliente_id_fkey"
+            columns: ["cliente_id"]
+            isOneToOne: false
+            referencedRelation: "clientes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "agendamentos_organizacao_id_fkey"
+            columns: ["organizacao_id"]
+            isOneToOne: false
+            referencedRelation: "organizacoes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "agendamentos_profissional_id_fkey"
+            columns: ["profissional_id"]
+            isOneToOne: false
+            referencedRelation: "profissionais"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "agendamentos_servico_id_fkey"
+            columns: ["servico_id"]
+            isOneToOne: false
+            referencedRelation: "servicos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      clientes: {
+        Row: {
+          criado_em: string
+          email: string | null
+          id: string
+          nome: string
+          observacoes: string | null
+          organizacao_id: string
+          telefone: string
+        }
+        Insert: {
+          criado_em?: string
+          email?: string | null
+          id?: string
+          nome: string
+          observacoes?: string | null
+          organizacao_id: string
+          telefone: string
+        }
+        Update: {
+          criado_em?: string
+          email?: string | null
+          id?: string
+          nome?: string
+          observacoes?: string | null
+          organizacao_id?: string
+          telefone?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clientes_organizacao_id_fkey"
+            columns: ["organizacao_id"]
+            isOneToOne: false
+            referencedRelation: "organizacoes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organizacoes: {
+        Row: {
+          atualizado_em: string
+          criado_em: string
+          endereco: string | null
+          id: string
+          minutos_expiracao_pix: number
+          nome: string
+          percentual_sinal: number
+          slug: string
+          telefone: string | null
+        }
+        Insert: {
+          atualizado_em?: string
+          criado_em?: string
+          endereco?: string | null
+          id?: string
+          minutos_expiracao_pix?: number
+          nome: string
+          percentual_sinal?: number
+          slug: string
+          telefone?: string | null
+        }
+        Update: {
+          atualizado_em?: string
+          criado_em?: string
+          endereco?: string | null
+          id?: string
+          minutos_expiracao_pix?: number
+          nome?: string
+          percentual_sinal?: number
+          slug?: string
+          telefone?: string | null
+        }
+        Relationships: []
+      }
+      pagamentos_pix: {
+        Row: {
+          agendamento_id: string
+          criado_em: string
+          expira_em: string
+          id: string
+          organizacao_id: string
+          pago_em: string | null
+          qr_code_imagem_url: string | null
+          qr_code_texto: string
+          status: Database["public"]["Enums"]["status_pagamento"]
+          txid: string
+          valor: number
+        }
+        Insert: {
+          agendamento_id: string
+          criado_em?: string
+          expira_em: string
+          id?: string
+          organizacao_id: string
+          pago_em?: string | null
+          qr_code_imagem_url?: string | null
+          qr_code_texto: string
+          status?: Database["public"]["Enums"]["status_pagamento"]
+          txid: string
+          valor: number
+        }
+        Update: {
+          agendamento_id?: string
+          criado_em?: string
+          expira_em?: string
+          id?: string
+          organizacao_id?: string
+          pago_em?: string | null
+          qr_code_imagem_url?: string | null
+          qr_code_texto?: string
+          status?: Database["public"]["Enums"]["status_pagamento"]
+          txid?: string
+          valor?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pagamentos_pix_agendamento_id_fkey"
+            columns: ["agendamento_id"]
+            isOneToOne: false
+            referencedRelation: "agendamentos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pagamentos_pix_organizacao_id_fkey"
+            columns: ["organizacao_id"]
+            isOneToOne: false
+            referencedRelation: "organizacoes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          criado_em: string
+          email: string | null
+          id: string
+          nome_completo: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          criado_em?: string
+          email?: string | null
+          id: string
+          nome_completo?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          criado_em?: string
+          email?: string | null
+          id?: string
+          nome_completo?: string | null
+        }
+        Relationships: []
+      }
+      profissionais: {
+        Row: {
+          ativo: boolean
+          criado_em: string
+          especialidade: string | null
+          id: string
+          nome: string
+          organizacao_id: string
+          telefone: string | null
+        }
+        Insert: {
+          ativo?: boolean
+          criado_em?: string
+          especialidade?: string | null
+          id?: string
+          nome: string
+          organizacao_id: string
+          telefone?: string | null
+        }
+        Update: {
+          ativo?: boolean
+          criado_em?: string
+          especialidade?: string | null
+          id?: string
+          nome?: string
+          organizacao_id?: string
+          telefone?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profissionais_organizacao_id_fkey"
+            columns: ["organizacao_id"]
+            isOneToOne: false
+            referencedRelation: "organizacoes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      servicos: {
+        Row: {
+          ativo: boolean
+          criado_em: string
+          descricao: string | null
+          duracao_minutos: number
+          id: string
+          nome: string
+          organizacao_id: string
+          preco: number
+          profissional_id: string | null
+        }
+        Insert: {
+          ativo?: boolean
+          criado_em?: string
+          descricao?: string | null
+          duracao_minutos: number
+          id?: string
+          nome: string
+          organizacao_id: string
+          preco: number
+          profissional_id?: string | null
+        }
+        Update: {
+          ativo?: boolean
+          criado_em?: string
+          descricao?: string | null
+          duracao_minutos?: number
+          id?: string
+          nome?: string
+          organizacao_id?: string
+          preco?: number
+          profissional_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "servicos_organizacao_id_fkey"
+            columns: ["organizacao_id"]
+            isOneToOne: false
+            referencedRelation: "organizacoes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "servicos_profissional_id_fkey"
+            columns: ["profissional_id"]
+            isOneToOne: false
+            referencedRelation: "profissionais"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          criado_em: string
+          id: string
+          organizacao_id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          criado_em?: string
+          id?: string
+          organizacao_id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          criado_em?: string
+          id?: string
+          organizacao_id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_roles_organizacao_id_fkey"
+            columns: ["organizacao_id"]
+            isOneToOne: false
+            referencedRelation: "organizacoes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _organizacao_id: string
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_membro: {
+        Args: { _organizacao_id: string; _user_id: string }
+        Returns: boolean
+      }
+      tem_conflito_horario: {
+        Args: {
+          _fim: string
+          _ignorar_id?: string
+          _inicio: string
+          _profissional_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "dono" | "funcionario"
+      status_agendamento:
+        | "pendente"
+        | "confirmado"
+        | "pago"
+        | "cancelado"
+        | "concluido"
+        | "expirado"
+      status_pagamento: "aguardando" | "pago" | "expirado" | "cancelado"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +533,17 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["dono", "funcionario"],
+      status_agendamento: [
+        "pendente",
+        "confirmado",
+        "pago",
+        "cancelado",
+        "concluido",
+        "expirado",
+      ],
+      status_pagamento: ["aguardando", "pago", "expirado", "cancelado"],
+    },
   },
 } as const
