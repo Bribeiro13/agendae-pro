@@ -33,20 +33,18 @@ export default function Onboarding() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
-    const { data: orgData, error: orgErr } = await supabase
-      .from("organizacoes")
-      .insert({ nome, slug, telefone })
-      .select()
-      .single();
-    if (orgErr || !orgData) {
-      setSubmitting(false);
-      return toast.error(orgErr?.message ?? "Erro ao criar negócio");
-    }
-    const { error: roleErr } = await supabase
-      .from("user_roles")
-      .insert({ user_id: user.id, organizacao_id: orgData.id, role: "dono" });
+    const { error } = await supabase.rpc("criar_organizacao_com_dono", {
+      _nome: nome,
+      _slug: slug,
+      _telefone: telefone || null,
+    });
     setSubmitting(false);
-    if (roleErr) return toast.error(roleErr.message);
+    if (error) {
+      const msg = error.message.includes("duplicate key")
+        ? "Esse link já está em uso. Tente outro."
+        : error.message;
+      return toast.error(msg);
+    }
     toast.success("Tudo pronto! Bem-vindo ao Agendae.");
     await refreshOrg();
     navigate("/app");
