@@ -21,7 +21,7 @@ import {
   Users,
   Zap,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -63,9 +63,28 @@ export default function Index() {
 
 /* ---------- Navbar ---------- */
 function Navbar({ destino, user }: { destino: string; user: boolean }) {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header className="absolute inset-x-0 top-0 z-30">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 text-white">
+    <header
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ease-out ${
+        scrolled
+          ? "border-b border-white/10 bg-[hsl(var(--ink))]/70 backdrop-blur-xl supports-[backdrop-filter]:bg-[hsl(var(--ink))]/55"
+          : "border-b border-transparent bg-transparent"
+      }`}
+    >
+      <div
+        className={`mx-auto flex max-w-7xl items-center justify-between px-6 text-white transition-all duration-500 ease-out ${
+          scrolled ? "py-3" : "py-5"
+        }`}
+      >
         <Link to="/" className="flex items-center gap-2.5">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand shadow-[var(--shadow-brand)]">
             <CalendarDays className="h-4.5 w-4.5 text-white" strokeWidth={2.5} />

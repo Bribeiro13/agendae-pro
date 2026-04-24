@@ -23,10 +23,10 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222 32% 12%;
 
-    /* Brand */
-    --primary: 238 84% 60%;            /* índigo vibrante */
+    /* Brand — laranja Agendae */
+    --primary: 14 90% 55%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 258 90% 68%;       /* gradient pair */
+    --primary-glow: 22 95% 60%;
 
     --secondary: 220 25% 96%;
     --secondary-foreground: 222 32% 18%;
@@ -45,7 +45,7 @@
 
     --border: 220 18% 90%;
     --input: 220 18% 90%;
-    --ring: 238 84% 60%;
+    --ring: 14 90% 55%;
 
     --radius: 0.875rem;
 
@@ -57,25 +57,25 @@
     --event-slate: 222 18% 38%;
 
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(238 84% 60%), hsl(258 90% 68%));
-    --gradient-accent: linear-gradient(135deg, hsl(158 72% 42%), hsl(178 78% 45%));
+    --gradient-primary: linear-gradient(135deg, hsl(14 90% 55%), hsl(22 95% 60%));
+    --gradient-accent: linear-gradient(135deg, hsl(14 90% 55%), hsl(32 95% 60%));
     --gradient-soft: linear-gradient(180deg, hsl(220 30% 99%), hsl(220 30% 96%));
     --gradient-sidebar: linear-gradient(180deg, hsl(222 32% 11%), hsl(222 36% 8%));
 
     /* Shadows */
     --shadow-soft: 0 1px 2px hsl(222 32% 12% / 0.04), 0 4px 12px hsl(222 32% 12% / 0.04);
     --shadow-elevated: 0 4px 8px hsl(222 32% 12% / 0.04), 0 20px 40px -12px hsl(222 32% 12% / 0.10);
-    --shadow-glow: 0 8px 24px -8px hsl(238 84% 60% / 0.45);
+    --shadow-glow: 0 8px 24px -8px hsl(14 90% 55% / 0.45);
 
     /* SIDEBAR (escura) */
     --sidebar-background: 222 36% 9%;
     --sidebar-foreground: 220 14% 78%;
-    --sidebar-primary: 238 84% 66%;
+    --sidebar-primary: 14 90% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 222 32% 15%;
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 222 28% 16%;
-    --sidebar-ring: 238 84% 66%;
+    --sidebar-ring: 14 90% 60%;
   }
 
   .dark {
@@ -85,7 +85,7 @@
     --card-foreground: 220 14% 92%;
     --popover: 222 32% 11%;
     --popover-foreground: 220 14% 92%;
-    --primary: 238 84% 66%;
+    --primary: 14 90% 60%;
     --primary-foreground: 0 0% 100%;
     --secondary: 222 28% 16%;
     --secondary-foreground: 220 14% 92%;
@@ -97,7 +97,7 @@
     --destructive-foreground: 0 0% 100%;
     --border: 222 28% 18%;
     --input: 222 28% 18%;
-    --ring: 238 84% 66%;
+    --ring: 14 90% 60%;
   }
 }
 
