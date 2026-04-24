@@ -16,6 +16,10 @@ import {
   Stethoscope,
   Sparkles,
   ChevronDown,
+  Bell,
+  TrendingUp,
+  Users,
+  Zap,
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -251,52 +255,105 @@ function SocialProof() {
 /* ---------- Features (Bento) ---------- */
 function Features() {
   return (
-    <section id="recursos" className="bg-secondary/40 py-24">
-      <div className="mx-auto max-w-7xl px-6">
-        <SectionHead
-          title="Tudo o que você precisa, sem complicação."
-          desc="Desenhamos o Agendae para ser a ferramenta mais elegante e fácil de usar no dia a dia do seu negócio."
-        />
+    <section id="recursos" className="relative overflow-hidden bg-gradient-to-b from-white via-secondary/30 to-white py-28">
+      {/* ambient glows */}
+      <div className="pointer-events-none absolute -left-40 top-40 h-96 w-96 rounded-full bg-brand/[0.07] blur-[120px]" />
+      <div className="pointer-events-none absolute -right-40 bottom-20 h-96 w-96 rounded-full bg-violet-500/[0.06] blur-[120px]" />
 
-        <div className="mt-14 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-6">
-          <FeatureCard
-            className="lg:col-span-3 bg-[hsl(var(--tint-mint))]"
-            icon={MessageCircle}
-            iconColor="text-emerald-600 bg-emerald-100"
-            title="Lembretes Automáticos"
-            desc="Diga adeus às faltas. O Agendae envia mensagens de WhatsApp automáticas 24h antes do horário."
+      <div className="relative mx-auto max-w-7xl px-6">
+        <motion.div
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-80px" }}
+          className="mx-auto max-w-2xl text-center"
+        >
+          <motion.span
+            variants={fadeUp}
+            className="inline-flex items-center gap-2 rounded-full border border-border bg-white px-3.5 py-1.5 text-xs font-medium text-muted-foreground shadow-[var(--shadow-soft)]"
           >
-            <ChatBubble />
+            <Zap className="h-3.5 w-3.5 text-brand" />
+            Recursos pensados nos detalhes
+          </motion.span>
+          <motion.h2 variants={fadeUp} custom={1} className="mt-5 font-display text-4xl font-bold leading-[1.1] md:text-5xl">
+            Tudo o que você precisa,
+            <br />
+            <span className="gradient-text">sem complicação.</span>
+          </motion.h2>
+          <motion.p variants={fadeUp} custom={2} className="mt-4 text-base text-muted-foreground">
+            Cada detalhe foi desenhado para tornar o dia a dia do seu negócio mais leve, profissional e rentável.
+          </motion.p>
+        </motion.div>
+
+        {/* Asymmetric bento grid */}
+        <div className="mt-16 grid grid-cols-1 gap-4 md:grid-cols-6 md:gap-5">
+          {/* Hero feature — WhatsApp */}
+          <FeatureCard className="md:col-span-4 md:row-span-2" tone="emerald" pad="lg">
+            <FeatureHeader
+              icon={MessageCircle}
+              tone="emerald"
+              eyebrow="WhatsApp Automático"
+              title="Lembretes que reduzem faltas em até 78%"
+              desc="O Agendae conversa com seus clientes por você. Confirmações, lembretes 24h antes e mensagens de pós-atendimento — tudo automático."
+            />
+            <ChatThread />
           </FeatureCard>
 
-          <FeatureCard
-            className="lg:col-span-3 bg-[hsl(var(--tint-peach))]"
-            icon={QrCode}
-            iconColor="text-brand bg-brand/10"
-            title="Pix Integrado"
-            desc="Cobre um sinal antecipado e acabe com os prejuízos de quem marca e não aparece."
-          >
-            <PixMock />
+          {/* Pix */}
+          <FeatureCard className="md:col-span-2" tone="brand" pad="md">
+            <FeatureHeader
+              icon={QrCode}
+              tone="brand"
+              eyebrow="Pix Integrado"
+              title="Cobre sinal antecipado"
+              desc="Acabe com prejuízos de quem marca e não aparece."
+            />
+            <PixMockRich />
           </FeatureCard>
 
-          <FeatureCard
-            className="lg:col-span-2 bg-[hsl(var(--tint-sky))]"
-            icon={Smartphone}
-            iconColor="text-blue-600 bg-blue-100"
-            title="Link de Agendamento"
-            desc="Um link elegante para colocar no seu Instagram. O cliente agenda sozinho."
-          >
-            <PhoneMock />
+          {/* Stat / no-show */}
+          <FeatureCard className="md:col-span-2" tone="violet" pad="md">
+            <FeatureHeader
+              icon={TrendingUp}
+              tone="violet"
+              eyebrow="Resultados reais"
+              title="Mais receita, menos faltas"
+            />
+            <StatMock />
           </FeatureCard>
 
-          <FeatureCard
-            className="lg:col-span-4 bg-[hsl(var(--tint-lavender))]"
-            icon={CalendarDays}
-            iconColor="text-violet-600 bg-violet-100"
-            title="Agenda Inteligente"
-            desc="Sem chance de horário duplicado. Controle a rotina de múltiplos profissionais em uma visão única e fluida."
-          >
-            <AgendaStripsMock />
+          {/* Link público */}
+          <FeatureCard className="md:col-span-2" tone="sky" pad="md">
+            <FeatureHeader
+              icon={Smartphone}
+              tone="sky"
+              eyebrow="Link público"
+              title="O cliente agenda sozinho"
+              desc="Coloque no Instagram e receba reservas 24/7."
+            />
+            <PhoneMockRich />
+          </FeatureCard>
+
+          {/* CRM */}
+          <FeatureCard className="md:col-span-2" tone="peach" pad="md">
+            <FeatureHeader
+              icon={Users}
+              tone="brand"
+              eyebrow="CRM simples"
+              title="Conheça quem te procura"
+            />
+            <CrmMock />
+          </FeatureCard>
+
+          {/* Calendar wide */}
+          <FeatureCard className="md:col-span-4" tone="lavender" pad="md">
+            <FeatureHeader
+              icon={CalendarDays}
+              tone="violet"
+              eyebrow="Agenda inteligente"
+              title="Vários profissionais, uma visão fluida"
+              desc="Sem chance de horários duplicados. Visual claro, conflitos detectados em tempo real."
+            />
+            <AgendaGridMock />
           </FeatureCard>
         </div>
       </div>
@@ -322,19 +379,31 @@ function SectionHead({ title, desc }: { title: string; desc: string }) {
   );
 }
 
+const TONE_BG: Record<string, string> = {
+  emerald: "bg-[hsl(var(--tint-mint))]",
+  brand: "bg-[hsl(var(--tint-peach))]",
+  peach: "bg-[hsl(var(--tint-peach))]",
+  sky: "bg-[hsl(var(--tint-sky))]",
+  violet: "bg-[hsl(var(--tint-lavender))]",
+  lavender: "bg-[hsl(var(--tint-lavender))]",
+};
+
+const TONE_ICON: Record<string, string> = {
+  emerald: "bg-emerald-500/15 text-emerald-700",
+  brand: "bg-brand/15 text-brand",
+  sky: "bg-blue-500/15 text-blue-700",
+  violet: "bg-violet-500/15 text-violet-700",
+};
+
 function FeatureCard({
   className = "",
-  icon: Icon,
-  iconColor,
-  title,
-  desc,
+  tone = "brand",
+  pad = "md",
   children,
 }: {
   className?: string;
-  icon: any;
-  iconColor: string;
-  title: string;
-  desc: string;
+  tone?: keyof typeof TONE_BG;
+  pad?: "md" | "lg";
   children?: React.ReactNode;
 }) {
   return (
@@ -344,84 +413,277 @@ function FeatureCard({
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       whileHover={{ y: -4 }}
-      className={`relative overflow-hidden rounded-3xl border border-border/60 p-7 ${className}`}
+      className={`group relative flex flex-col overflow-hidden rounded-3xl border border-border/50 ${TONE_BG[tone]} ${
+        pad === "lg" ? "p-8 md:p-10" : "p-6 md:p-7"
+      } shadow-[var(--shadow-soft)] transition-shadow hover:shadow-[var(--shadow-elevated)] ${className}`}
     >
-      <div className={`mb-5 inline-flex h-9 w-9 items-center justify-center rounded-lg ${iconColor}`}>
-        <Icon className="h-4.5 w-4.5" />
-      </div>
-      <h3 className="font-display text-base font-bold">{title}</h3>
-      <p className="mt-1.5 max-w-md text-sm leading-relaxed text-muted-foreground">{desc}</p>
-      {children && <div className="mt-6">{children}</div>}
+      {/* sheen */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-transparent opacity-60" />
+      <div className="relative flex h-full flex-col">{children}</div>
     </motion.div>
   );
 }
 
-function ChatBubble() {
+function FeatureHeader({
+  icon: Icon,
+  tone,
+  eyebrow,
+  title,
+  desc,
+}: {
+  icon: any;
+  tone: keyof typeof TONE_ICON;
+  eyebrow?: string;
+  title: string;
+  desc?: string;
+}) {
   return (
-    <div className="flex justify-center">
-      <div className="flex max-w-sm items-start gap-3 rounded-2xl bg-white p-4 shadow-[var(--shadow-soft)]">
-        <span className="mt-1 h-2.5 w-2.5 flex-shrink-0 rounded-full bg-emerald-400" />
-        <p className="text-xs leading-relaxed text-muted-foreground">
-          Olá João! Seu corte de cabelo está confirmado para amanhã às 14h no Studio Barba.
+    <div>
+      <div className={`inline-flex h-10 w-10 items-center justify-center rounded-xl ${TONE_ICON[tone]}`}>
+        <Icon className="h-5 w-5" strokeWidth={2.2} />
+      </div>
+      {eyebrow && (
+        <p className="mt-5 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+          {eyebrow}
         </p>
+      )}
+      <h3 className="mt-1.5 font-display text-xl font-bold leading-tight md:text-[1.4rem]">
+        {title}
+      </h3>
+      {desc && <p className="mt-2 max-w-md text-sm leading-relaxed text-muted-foreground">{desc}</p>}
+    </div>
+  );
+}
+
+/* ---- Mocks ---- */
+
+function ChatThread() {
+  const msgs = [
+    { from: "biz", text: "Olá João! Confirmando seu corte amanhã às 14h no Studio Barba 💈", time: "09:12" },
+    { from: "client", text: "Confirmado! Estarei aí 👍", time: "09:14" },
+    { from: "biz", text: "Perfeito! Te esperamos ✨", time: "09:14" },
+  ];
+  return (
+    <div className="mt-7 flex-1">
+      <div className="relative mx-auto max-w-md rounded-2xl bg-white p-5 shadow-[var(--shadow-card-lg)]">
+        <div className="mb-4 flex items-center justify-between border-b border-border/60 pb-3">
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500 text-white">
+              <MessageCircle className="h-4 w-4" />
+            </div>
+            <div>
+              <p className="text-xs font-bold">Studio Barba</p>
+              <p className="text-[10px] text-emerald-600">● online</p>
+            </div>
+          </div>
+          <span className="text-[10px] text-muted-foreground">hoje</span>
+        </div>
+        <div className="space-y-2">
+          {msgs.map((m, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 8 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 + i * 0.25, duration: 0.45 }}
+              className={`flex ${m.from === "client" ? "justify-end" : "justify-start"}`}
+            >
+              <div
+                className={`max-w-[85%] rounded-2xl px-3.5 py-2 text-xs leading-snug ${
+                  m.from === "client"
+                    ? "rounded-br-sm bg-emerald-500 text-white"
+                    : "rounded-bl-sm bg-secondary text-foreground"
+                }`}
+              >
+                {m.text}
+                <div
+                  className={`mt-0.5 text-right text-[9px] ${
+                    m.from === "client" ? "text-white/70" : "text-muted-foreground"
+                  }`}
+                >
+                  {m.time}
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </div>
   );
 }
 
-function PixMock() {
+function PixMockRich() {
   return (
-    <div className="flex justify-center">
+    <div className="mt-6 flex-1">
       <div className="rounded-2xl bg-white p-4 shadow-[var(--shadow-soft)]">
-        <div className="grid h-24 w-24 grid-cols-7 grid-rows-7 gap-[2px] [&>span]:rounded-[1px]">
-          {Array.from({ length: 49 }).map((_, i) => {
-            const seed = (i * 7 + 3) % 11;
-            return <span key={i} className={seed > 5 ? "bg-[hsl(var(--ink))]" : "bg-transparent"} />;
+        <div className="flex items-center justify-between">
+          <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Sinal</span>
+          <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
+            Pago
+          </span>
+        </div>
+        <p className="mt-1 font-display text-2xl font-bold tabular-nums">R$ 24,00</p>
+        <div className="mt-3 grid grid-cols-9 grid-rows-9 gap-[2px] rounded-md bg-secondary/60 p-2">
+          {Array.from({ length: 81 }).map((_, i) => {
+            const seed = (i * 13 + 7) % 17;
+            return (
+              <span
+                key={i}
+                className={seed > 8 ? "rounded-[1px] bg-[hsl(var(--ink))]" : "bg-transparent"}
+              />
+            );
           })}
         </div>
-        <p className="mt-2 text-center text-[10px] font-medium text-muted-foreground">Pix Copia e Cola</p>
       </div>
     </div>
   );
 }
 
-function PhoneMock() {
+function StatMock() {
+  const bars = [40, 55, 35, 70, 60, 85, 95];
   return (
-    <div className="flex justify-center">
-      <div className="w-32 rounded-2xl bg-white p-3 shadow-[var(--shadow-soft)]">
-        <div className="mx-auto mb-2.5 h-1 w-8 rounded-full bg-muted" />
-        <div className="space-y-1.5">
-          <div className="h-2 rounded bg-muted" />
-          <div className="h-2 w-4/5 rounded bg-muted" />
-          <div className="h-2 w-3/5 rounded bg-muted" />
-          <div className="mt-2 h-6 rounded-md bg-brand/30" />
+    <div className="mt-6 flex-1">
+      <div className="rounded-2xl bg-white p-4 shadow-[var(--shadow-soft)]">
+        <div className="flex items-baseline justify-between">
+          <p className="font-display text-2xl font-bold text-violet-700">+78%</p>
+          <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-600">
+            <TrendingUp className="h-3 w-3" /> vs. mês anterior
+          </span>
+        </div>
+        <p className="text-[11px] text-muted-foreground">Comparecimento</p>
+        <div className="mt-3 flex h-16 items-end gap-1.5">
+          {bars.map((h, i) => (
+            <motion.div
+              key={i}
+              initial={{ height: 0 }}
+              whileInView={{ height: `${h}%` }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 + i * 0.06, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              className="flex-1 rounded-t-sm bg-gradient-to-t from-violet-300 to-violet-500"
+            />
+          ))}
         </div>
       </div>
     </div>
   );
 }
 
-function AgendaStripsMock() {
+function PhoneMockRich() {
   return (
-    <div className="space-y-2 rounded-2xl bg-white p-3 shadow-[var(--shadow-soft)]">
-      <motion.div
-        initial={{ width: 0 }}
-        whileInView={{ width: "70%" }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8, delay: 0.2 }}
-        className="rounded-md bg-violet-200/70 px-3 py-2 text-xs font-semibold text-violet-900"
-      >
-        Rafael — 09:00
-      </motion.div>
-      <motion.div
-        initial={{ width: 0 }}
-        whileInView={{ width: "85%" }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8, delay: 0.4 }}
-        className="ml-6 rounded-md bg-blue-200/70 px-3 py-2 text-xs font-semibold text-blue-900"
-      >
-        Marcos — 10:00
-      </motion.div>
+    <div className="mt-6 flex flex-1 justify-center">
+      <div className="w-40 rounded-[1.6rem] border-[6px] border-[hsl(var(--ink))] bg-white p-2.5 shadow-[var(--shadow-card-lg)]">
+        <div className="mx-auto mb-2 h-1 w-8 rounded-full bg-muted" />
+        <div className="rounded-lg bg-secondary/60 p-2">
+          <p className="text-[9px] font-bold">Studio Barba</p>
+          <p className="text-[8px] text-muted-foreground">Escolha um horário</p>
+        </div>
+        <div className="mt-2 grid grid-cols-3 gap-1">
+          {["09h", "10h", "11h", "14h", "15h", "16h"].map((t, i) => (
+            <motion.div
+              key={t}
+              initial={{ opacity: 0, scale: 0.85 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.15 + i * 0.06 }}
+              className={`rounded text-center text-[9px] font-semibold py-1 ${
+                i === 3 ? "bg-brand text-white" : "bg-secondary text-foreground"
+              }`}
+            >
+              {t}
+            </motion.div>
+          ))}
+        </div>
+        <div className="mt-2 rounded-md bg-brand py-1.5 text-center text-[9px] font-bold text-white">
+          Confirmar
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CrmMock() {
+  const people = [
+    { n: "Mariana A.", v: "12 visitas", c: "bg-rose-200 text-rose-800" },
+    { n: "João Pedro", v: "8 visitas", c: "bg-amber-200 text-amber-800" },
+    { n: "Camila R.", v: "5 visitas", c: "bg-emerald-200 text-emerald-800" },
+  ];
+  return (
+    <div className="mt-6 flex-1 space-y-2">
+      {people.map((p, i) => (
+        <motion.div
+          key={p.n}
+          initial={{ opacity: 0, x: -10 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.15 + i * 0.1 }}
+          className="flex items-center gap-3 rounded-xl bg-white px-3 py-2 shadow-[var(--shadow-soft)]"
+        >
+          <div className={`flex h-8 w-8 items-center justify-center rounded-full text-[11px] font-bold ${p.c}`}>
+            {p.n[0]}
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-xs font-semibold">{p.n}</p>
+            <p className="text-[10px] text-muted-foreground">{p.v}</p>
+          </div>
+          <Star className="h-3.5 w-3.5 fill-brand text-brand" />
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
+function AgendaGridMock() {
+  const events = [
+    { col: 0, top: 4, h: 28, label: "Rafael — 09:00", c: "bg-violet-300/80 text-violet-900" },
+    { col: 1, top: 14, h: 36, label: "Marcos — 10:00", c: "bg-blue-300/80 text-blue-900" },
+    { col: 2, top: 8, h: 24, label: "Beatriz — 09:30", c: "bg-emerald-300/80 text-emerald-900" },
+    { col: 0, top: 50, h: 20, label: "João — 13:00", c: "bg-amber-300/80 text-amber-900" },
+    { col: 2, top: 46, h: 30, label: "Carla — 12:30", c: "bg-rose-300/80 text-rose-900" },
+  ];
+  const hours = ["09h", "10h", "11h", "12h", "13h", "14h"];
+  return (
+    <div className="mt-6 flex-1">
+      <div className="rounded-2xl bg-white p-4 shadow-[var(--shadow-soft)]">
+        <div className="mb-2 grid grid-cols-[28px_repeat(3,1fr)] gap-1.5 text-[10px] font-semibold text-muted-foreground">
+          <span />
+          <span className="text-center">Rafael</span>
+          <span className="text-center">Marcos</span>
+          <span className="text-center">Beatriz</span>
+        </div>
+        <div className="grid grid-cols-[28px_repeat(3,1fr)] gap-1.5">
+          <div className="flex flex-col justify-between py-0.5 text-[9px] text-muted-foreground">
+            {hours.map((h) => (
+              <span key={h}>{h}</span>
+            ))}
+          </div>
+          {[0, 1, 2].map((col) => (
+            <div key={col} className="relative h-32 rounded-md bg-secondary/40">
+              {[1, 2, 3, 4, 5].map((l) => (
+                <div
+                  key={l}
+                  className="absolute inset-x-0 border-t border-dashed border-border/60"
+                  style={{ top: `${l * 20}%` }}
+                />
+              ))}
+              {events
+                .filter((e) => e.col === col)
+                .map((e, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, scaleY: 0.6 }}
+                    whileInView={{ opacity: 1, scaleY: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.2 + i * 0.15, duration: 0.5 }}
+                    style={{ top: `${e.top}%`, height: `${e.h}%`, transformOrigin: "top" }}
+                    className={`absolute inset-x-1 truncate rounded-md px-1.5 py-1 text-[9px] font-semibold shadow-sm ${e.c}`}
+                  >
+                    {e.label}
+                  </motion.div>
+                ))}
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
