@@ -76,7 +76,7 @@ function Navbar({ destino, user }: { destino: string; user: boolean }) {
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ease-out ${
         scrolled
-          ? "border-b border-white/10 bg-[hsl(var(--ink))]/70 backdrop-blur-xl supports-[backdrop-filter]:bg-[hsl(var(--ink))]/55"
+          ? "border-b border-white/5 bg-[hsl(var(--ink))]/25 backdrop-blur-xl supports-[backdrop-filter]:bg-[hsl(var(--ink))]/15"
           : "border-b border-transparent bg-transparent"
       }`}
     >
