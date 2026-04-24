@@ -114,16 +114,60 @@
   }
 }
 
+@layer base {
+  :root {
+    /* Brand "Agendae" — laranja quente sobre fundo carvão */
+    --brand: 14 90% 55%;
+    --brand-foreground: 0 0% 100%;
+    --brand-soft: 14 100% 96%;
+    --ink: 222 32% 9%;
+    --ink-soft: 222 24% 18%;
+
+    --tint-mint: 158 65% 95%;
+    --tint-peach: 18 100% 96%;
+    --tint-sky: 220 95% 96%;
+    --tint-lavender: 260 80% 97%;
+
+    --gradient-brand: linear-gradient(135deg, hsl(14 90% 55%), hsl(22 95% 60%));
+    --shadow-brand: 0 12px 32px -12px hsl(14 90% 55% / 0.45);
+    --shadow-card-lg: 0 1px 2px hsl(222 32% 12% / 0.04), 0 24px 60px -24px hsl(222 32% 12% / 0.18);
+  }
+}
+
 @layer components {
   .bento-card {
     @apply rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-soft)] transition-all hover:shadow-[var(--shadow-elevated)];
   }
   .gradient-primary { background: var(--gradient-primary); }
   .gradient-accent { background: var(--gradient-accent); }
+  .gradient-brand { background: var(--gradient-brand); }
   .gradient-text {
-    background: var(--gradient-primary);
+    background: var(--gradient-brand);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
+  .text-brand { color: hsl(var(--brand)); }
+  .bg-brand { background-color: hsl(var(--brand)); }
+  .ring-brand { --tw-ring-color: hsl(var(--brand)); }
 }
+
+/* Subtle grid for hero background */
+.bg-grid-faint {
+  background-image:
+    linear-gradient(to right, hsl(0 0% 100% / 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, hsl(0 0% 100% / 0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.animate-float { animation: float-y 6s ease-in-out infinite; }
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.animate-marquee { animation: marquee 28s linear infinite; }
