@@ -1,10 +1,12 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/useAuth";
 import { AppLayout } from "@/components/layout/AppLayout";
+import PageTransition from "@/components/PageTransition";
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Auth from "./pages/Auth.tsx";
@@ -20,6 +22,33 @@ import ReservaPublica from "./pages/ReservaPublica.tsx";
 
 const queryClient = new QueryClient();
 
+const wrap = (node: React.ReactNode) => <PageTransition>{node}</PageTransition>;
+
+const AnimatedRoutes = () => {
+  const location = useLocation();
+  return (
+    <AnimatePresence mode="wait" initial={false}>
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={wrap(<Index />)} />
+        <Route path="/auth" element={wrap(<Auth />)} />
+        <Route path="/onboarding" element={wrap(<Onboarding />)} />
+        <Route path="/r/:slug" element={wrap(<ReservaPublica />)} />
+
+        <Route path="/app" element={<AppLayout>{wrap(<Painel />)}</AppLayout>} />
+        <Route path="/app/agenda" element={<AppLayout>{wrap(<Agenda />)}</AppLayout>} />
+        <Route path="/app/clientes" element={<AppLayout>{wrap(<Clientes />)}</AppLayout>} />
+        <Route path="/app/servicos" element={<AppLayout>{wrap(<Servicos />)}</AppLayout>} />
+        <Route path="/app/profissionais" element={<AppLayout>{wrap(<Profissionais />)}</AppLayout>} />
+        <Route path="/app/link-publico" element={<AppLayout>{wrap(<LinkPublico />)}</AppLayout>} />
+        <Route path="/app/configuracoes" element={<AppLayout>{wrap(<Configuracoes />)}</AppLayout>} />
+
+        {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+        <Route path="*" element={wrap(<NotFound />)} />
+      </Routes>
+    </AnimatePresence>
+  );
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -27,23 +56,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/onboarding" element={<Onboarding />} />
-            <Route path="/r/:slug" element={<ReservaPublica />} />
-
-            <Route path="/app" element={<AppLayout><Painel /></AppLayout>} />
-            <Route path="/app/agenda" element={<AppLayout><Agenda /></AppLayout>} />
-            <Route path="/app/clientes" element={<Clientes />} />
-            <Route path="/app/servicos" element={<Servicos />} />
-            <Route path="/app/profissionais" element={<Profissionais />} />
-            <Route path="/app/link-publico" element={<LinkPublico />} />
-            <Route path="/app/configuracoes" element={<Configuracoes />} />
-
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <AnimatedRoutes />
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
