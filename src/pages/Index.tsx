@@ -16,6 +16,10 @@ import {
   Stethoscope,
   Sparkles,
   ChevronDown,
+  Bell,
+  TrendingUp,
+  Users,
+  Zap,
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
