@@ -36,11 +36,11 @@ const AnimatedRoutes = () => {
 
         <Route path="/app" element={<AppLayout>{wrap(<Painel />)}</AppLayout>} />
         <Route path="/app/agenda" element={<AppLayout>{wrap(<Agenda />)}</AppLayout>} />
-        <Route path="/app/clientes" element={<AppLayout>{wrap(<Clientes />)}</AppLayout>} />
-        <Route path="/app/servicos" element={<AppLayout>{wrap(<Servicos />)}</AppLayout>} />
-        <Route path="/app/profissionais" element={<AppLayout>{wrap(<Profissionais />)}</AppLayout>} />
-        <Route path="/app/link-publico" element={<AppLayout>{wrap(<LinkPublico />)}</AppLayout>} />
-        <Route path="/app/configuracoes" element={<AppLayout>{wrap(<Configuracoes />)}</AppLayout>} />
+        <Route path="/app/clientes" element={wrap(<Clientes />)} />
+        <Route path="/app/servicos" element={wrap(<Servicos />)} />
+        <Route path="/app/profissionais" element={wrap(<Profissionais />)} />
+        <Route path="/app/link-publico" element={wrap(<LinkPublico />)} />
+        <Route path="/app/configuracoes" element={wrap(<Configuracoes />)} />
 
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={wrap(<NotFound />)} />
