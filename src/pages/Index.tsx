@@ -361,6 +361,24 @@ function Features() {
   );
 }
 
+function SectionHead({ title, desc }: { title: string; desc: string }) {
+  return (
+    <motion.div
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, margin: "-80px" }}
+      className="mx-auto max-w-2xl text-center"
+    >
+      <motion.h2 variants={fadeUp} className="font-display text-3xl font-bold md:text-4xl">
+        {title}
+      </motion.h2>
+      <motion.p variants={fadeUp} custom={1} className="mt-3 text-base text-muted-foreground">
+        {desc}
+      </motion.p>
+    </motion.div>
+  );
+}
+
 const TONE_BG: Record<string, string> = {
   emerald: "bg-[hsl(var(--tint-mint))]",
   brand: "bg-[hsl(var(--tint-peach))]",
