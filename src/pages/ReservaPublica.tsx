@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -76,20 +76,32 @@ export default function ReservaPublica() {
       .then(({ data }) => setAgendamentos(data ?? []));
   }, [org, profissional, diaSelecionado]);
 
-  // Polling do status do pagamento
+  // Polling do status do pagamento — ref evita recriar o interval a cada mudança de estado
+  const pagamentoRef = useRef(pagamento);
+  pagamentoRef.current = pagamento;
+
   useEffect(() => {
-    if (!pagamento || pagamento.status === "pago") return;
+    if (!pagamento?.pagamento_id || pagamento.status === "pago" || pagamento.status === "expirado") return;
     const t = setInterval(async () => {
-      const { data } = await supabase.from("pagamentos_pix")
-        .select("status").eq("id", pagamento.pagamento_id).maybeSingle();
-      if (data?.status && data.status !== pagamento.status) {
-        setPagamento({ ...pagamento, status: data.status });
+      const current = pagamentoRef.current;
+      if (!current || current.status === "pago" || current.status === "expirado") {
+        clearInterval(t);
+        return;
+      }
+      const { data } = await supabase
+        .from("pagamentos_pix")
+        .select("status")
+        .eq("id", current.pagamento_id)
+        .maybeSingle();
+      if (data?.status && data.status !== current.status) {
+        setPagamento((prev) => prev ? { ...prev, status: data.status } : prev);
         if (data.status === "pago") toast.success("Pagamento confirmado! 🎉");
         if (data.status === "expirado") toast.error("Pix expirou. Faça uma nova reserva.");
       }
-    }, 4000);
+    }, 5000); // 5s é suficiente — reduz requests desnecessários
     return () => clearInterval(t);
-  }, [pagamento]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pagamento?.pagamento_id]); // Só reinicia se mudar o ID do pagamento
 
   const profissionaisDoServico = useMemo(() => {
     if (!servico) return profissionais;
