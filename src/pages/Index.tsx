@@ -220,67 +220,33 @@ function AgendaPreviewCard() {
   );
 }
 
-/* ---------- Métricas / Resultados ---------- */
-const METRICS = [
-  { value: 2000, suffix: "+",  label: "Profissionais ativos",     hint: "Crescendo todo mês"        },
-  { value: 30,   suffix: "%",  label: "Aumento médio no faturamento", hint: "Após 60 dias de uso"   },
-  { value: 98,   suffix: "%",  label: "Redução de no-shows",      hint: "Com sinal via Pix"         },
-  { value: 4.9,  suffix: "/5", label: "Avaliação dos clientes",   hint: "Mais de 800 reviews",  decimals: 1 },
+/* ---------- Antes vs Depois ---------- */
+const BEFORE = [
+  "Agenda no caderno (ou em vários apps)",
+  "Cliente esquece e some sem avisar",
+  "WhatsApp lotado de mensagens repetidas",
+  "Cobrança de sinal? Quase impossível",
+  "Sem ideia do faturamento da semana",
 ];
 
-function useCountUp(target: number, decimals = 0, duration = 1600, start = false) {
-  const [val, setVal] = useState(0);
-  useEffect(() => {
-    if (!start) return;
-    let raf = 0;
-    const t0 = performance.now();
-    const tick = (now: number) => {
-      const p = Math.min(1, (now - t0) / duration);
-      // easeOutCubic
-      const eased = 1 - Math.pow(1 - p, 3);
-      setVal(target * eased);
-      if (p < 1) raf = requestAnimationFrame(tick);
-      else setVal(target);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [target, duration, start]);
-  return decimals > 0 ? val.toFixed(decimals) : Math.round(val).toLocaleString("pt-BR");
-}
-
-function MetricCard({ m, i, inView }: { m: typeof METRICS[number]; i: number; inView: boolean }) {
-  const display = useCountUp(m.value, m.decimals ?? 0, 1500 + i * 150, inView);
-  return (
-    <motion.div
-      variants={fadeUp}
-      custom={i}
-      className="group relative flex flex-col items-start gap-2 rounded-2xl border border-border/70 bg-white/60 p-6 backdrop-blur-sm transition-all duration-500 hover:-translate-y-1 hover:border-brand/30 hover:bg-white hover:shadow-[var(--shadow-soft)]"
-    >
-      <div className="absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-brand/40 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-      <div className="flex items-baseline gap-1">
-        <span className="font-display text-4xl font-bold tracking-tight text-foreground md:text-5xl">
-          {display}
-        </span>
-        <span className="font-display text-2xl font-bold text-brand md:text-3xl">{m.suffix}</span>
-      </div>
-      <p className="text-sm font-semibold text-foreground">{m.label}</p>
-      <p className="text-xs text-muted-foreground">{m.hint}</p>
-    </motion.div>
-  );
-}
+const AFTER = [
+  "Tudo num único lugar, do celular ao desktop",
+  "Lembretes automáticos no WhatsApp",
+  "Cliente agenda sozinho pelo seu link",
+  "Sinal via Pix garantido antes do horário",
+  "Painel claro com receita e ocupação em tempo real",
+];
 
 function SocialProof() {
-  const [inView, setInView] = useState(false);
   return (
-    <section className="relative overflow-hidden border-b border-border bg-white py-20">
+    <section className="relative overflow-hidden border-b border-border bg-white py-28">
       {/* glows decorativos */}
-      <div className="pointer-events-none absolute -left-32 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-brand/[0.06] blur-[100px]" />
-      <div className="pointer-events-none absolute -right-32 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-violet-500/[0.05] blur-[100px]" />
+      <div className="pointer-events-none absolute -left-32 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-rose-500/[0.05] blur-[100px]" />
+      <div className="pointer-events-none absolute -right-32 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-brand/[0.08] blur-[110px]" />
 
       <motion.div
         initial="hidden"
         whileInView="show"
-        onViewportEnter={() => setInView(true)}
         viewport={{ once: true, margin: "-80px" }}
         className="relative mx-auto max-w-6xl px-6"
       >
@@ -289,25 +255,91 @@ function SocialProof() {
             variants={fadeUp}
             className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary/60 px-3.5 py-1.5 text-xs font-medium text-muted-foreground"
           >
-            <TrendingUp className="h-3.5 w-3.5 text-brand" />
-            Resultados que falam por si
+            <Sparkles className="h-3.5 w-3.5 text-brand" />
+            A diferença que você sente no dia a dia
           </motion.span>
           <motion.h2
             variants={fadeUp}
             custom={1}
             className="mt-5 font-display text-3xl font-bold leading-[1.15] md:text-4xl"
           >
-            Negócios reais, <span className="gradient-text">números reais.</span>
+            Da rotina caótica para uma{" "}
+            <span className="gradient-text">agenda que trabalha por você.</span>
           </motion.h2>
           <motion.p variants={fadeUp} custom={2} className="mt-3 text-base text-muted-foreground">
-            Mais de 2.000 profissionais já transformaram a rotina da sua agenda.
+            Veja o antes e o depois de quem usa o Agendae no negócio.
           </motion.p>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-5">
-          {METRICS.map((m, i) => (
-            <MetricCard key={m.label} m={m} i={i} inView={inView} />
-          ))}
+        <div className="relative grid gap-5 md:grid-cols-2 md:gap-6">
+          {/* Divisor central decorativo */}
+          <div className="pointer-events-none absolute left-1/2 top-8 bottom-8 hidden w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-border to-transparent md:block" />
+
+          {/* ANTES */}
+          <motion.div
+            variants={fadeUp}
+            custom={1}
+            className="group relative overflow-hidden rounded-3xl border border-border/70 bg-secondary/40 p-8 backdrop-blur-sm transition-all duration-500 hover:border-rose-300/60"
+          >
+            <div className="mb-6 flex items-center justify-between">
+              <span className="inline-flex items-center gap-2 rounded-full bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-600">
+                <X className="h-3.5 w-3.5" /> Antes
+              </span>
+              <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground/70">
+                Sem o Agendae
+              </span>
+            </div>
+            <ul className="space-y-4">
+              {BEFORE.map((item, i) => (
+                <motion.li
+                  key={item}
+                  variants={fadeUp}
+                  custom={i + 1}
+                  className="flex items-start gap-3 text-[15px] text-muted-foreground line-through decoration-rose-300/60 decoration-1 underline-offset-4"
+                >
+                  <span className="mt-1 flex h-5 w-5 flex-none items-center justify-center rounded-full bg-rose-100 text-rose-500">
+                    <X className="h-3 w-3" />
+                  </span>
+                  <span>{item}</span>
+                </motion.li>
+              ))}
+            </ul>
+          </motion.div>
+
+          {/* DEPOIS */}
+          <motion.div
+            variants={fadeUp}
+            custom={2}
+            className="group relative overflow-hidden rounded-3xl border border-brand/30 bg-white p-8 shadow-[var(--shadow-soft)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[var(--shadow-elegant)]"
+          >
+            {/* glow superior */}
+            <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-brand/60 to-transparent" />
+            <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-brand/[0.08] blur-3xl" />
+
+            <div className="relative mb-6 flex items-center justify-between">
+              <span className="inline-flex items-center gap-2 rounded-full bg-brand/10 px-3 py-1 text-xs font-semibold text-brand">
+                <Check className="h-3.5 w-3.5" /> Depois
+              </span>
+              <span className="text-xs font-medium uppercase tracking-wider text-brand/80">
+                Com o Agendae
+              </span>
+            </div>
+            <ul className="relative space-y-4">
+              {AFTER.map((item, i) => (
+                <motion.li
+                  key={item}
+                  variants={fadeUp}
+                  custom={i + 1}
+                  className="flex items-start gap-3 text-[15px] font-medium text-foreground"
+                >
+                  <span className="mt-1 flex h-5 w-5 flex-none items-center justify-center rounded-full bg-brand text-white">
+                    <Check className="h-3 w-3" strokeWidth={3} />
+                  </span>
+                  <span>{item}</span>
+                </motion.li>
+              ))}
+            </ul>
+          </motion.div>
         </div>
       </motion.div>
     </section>
