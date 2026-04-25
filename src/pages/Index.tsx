@@ -283,33 +283,36 @@ function Features() {
           </motion.p>
         </motion.div>
 
-        <div className="mt-16 grid grid-cols-1 gap-4 md:grid-cols-6 md:gap-5">
-          <FeatureCard className="md:col-span-4 md:row-span-2" tone="emerald" pad="lg">
+        <div className="mt-16 grid auto-rows-[minmax(0,auto)] grid-cols-1 gap-5 md:grid-cols-12">
+          {/* Row 1 — Hero WhatsApp (wide) + Pix (tall) */}
+          <FeatureCard className="md:col-span-8" tone="emerald" pad="lg">
             <FeatureHeader icon={MessageCircle} tone="emerald" eyebrow="WhatsApp Automático" title="Lembretes que reduzem faltas em até 78%" desc="O Agendae conversa com seus clientes por você. Confirmações, lembretes 24h antes e mensagens de pós-atendimento — tudo automático." />
             <ChatThread />
           </FeatureCard>
 
-          <FeatureCard className="md:col-span-2" tone="brand" pad="md">
+          <FeatureCard className="md:col-span-4" tone="brand" pad="md">
             <FeatureHeader icon={QrCode} tone="brand" eyebrow="Pix Integrado" title="Cobre sinal antecipado" desc="Acabe com prejuízos de quem marca e não aparece." />
             <PixMockRich />
           </FeatureCard>
 
-          <FeatureCard className="md:col-span-2" tone="violet" pad="md">
+          {/* Row 2 — três cartões equilibrados */}
+          <FeatureCard className="md:col-span-4" tone="violet" pad="md">
             <FeatureHeader icon={TrendingUp} tone="violet" eyebrow="Resultados reais" title="Mais receita, menos faltas" />
             <StatMock />
           </FeatureCard>
 
-          <FeatureCard className="md:col-span-2" tone="sky" pad="md">
+          <FeatureCard className="md:col-span-4" tone="sky" pad="md">
             <FeatureHeader icon={Smartphone} tone="sky" eyebrow="Link público" title="O cliente agenda sozinho" desc="Coloque no Instagram e receba reservas 24/7." />
             <PhoneMockRich />
           </FeatureCard>
 
-          <FeatureCard className="md:col-span-2" tone="peach" pad="md">
+          <FeatureCard className="md:col-span-4" tone="peach" pad="md">
             <FeatureHeader icon={Users} tone="brand" eyebrow="CRM simples" title="Conheça quem te procura" />
             <CrmMock />
           </FeatureCard>
 
-          <FeatureCard className="md:col-span-4" tone="lavender" pad="md">
+          {/* Row 3 — Calendário largo */}
+          <FeatureCard className="md:col-span-12" tone="lavender" pad="md">
             <FeatureHeader icon={CalendarDays} tone="violet" eyebrow="Agenda inteligente" title="Vários profissionais, uma visão fluida" desc="Sem chance de horários duplicados. Visual claro, conflitos detectados em tempo real." />
             <AgendaGridMock />
           </FeatureCard>
