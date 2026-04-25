@@ -3,7 +3,7 @@ import { memo, useEffect, useState } from "react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import {
   CalendarDays, MessageCircle, QrCode, Smartphone, Clock, CreditCard,
-  CheckCircle2, ArrowRight, Star, Check, X, Scissors, Stethoscope,
+  CheckCircle2, ArrowRight, Star, Check, X,
   Sparkles, ChevronDown, Bell, TrendingUp, Users, Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
