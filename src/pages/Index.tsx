@@ -220,34 +220,96 @@ function AgendaPreviewCard() {
   );
 }
 
-/* ---------- Social proof marquee ---------- */
-// Logos definidos fora — imutáveis
-const LOGOS = [
-  { icon: Scissors,     name: "Studio Barba & Cia" },
-  { icon: Stethoscope,  name: "DermatoClinic" },
-  { icon: Sparkles,     name: "Espaço Beleza" },
-  { icon: CheckCircle2, name: "VANGUARD" },
-  { icon: Scissors,     name: "Mendes Barber" },
-  { icon: Stethoscope,  name: "Clínica Vita" },
+/* ---------- Métricas / Resultados ---------- */
+const METRICS = [
+  { value: 2000, suffix: "+",  label: "Profissionais ativos",     hint: "Crescendo todo mês"        },
+  { value: 30,   suffix: "%",  label: "Aumento médio no faturamento", hint: "Após 60 dias de uso"   },
+  { value: 98,   suffix: "%",  label: "Redução de no-shows",      hint: "Com sinal via Pix"         },
+  { value: 4.9,  suffix: "/5", label: "Avaliação dos clientes",   hint: "Mais de 800 reviews",  decimals: 1 },
 ];
-const LOGOS_ROW = [...LOGOS, ...LOGOS]; // duplicado para marquee infinito
+
+function useCountUp(target: number, decimals = 0, duration = 1600, start = false) {
+  const [val, setVal] = useState(0);
+  useEffect(() => {
+    if (!start) return;
+    let raf = 0;
+    const t0 = performance.now();
+    const tick = (now: number) => {
+      const p = Math.min(1, (now - t0) / duration);
+      // easeOutCubic
+      const eased = 1 - Math.pow(1 - p, 3);
+      setVal(target * eased);
+      if (p < 1) raf = requestAnimationFrame(tick);
+      else setVal(target);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [target, duration, start]);
+  return decimals > 0 ? val.toFixed(decimals) : Math.round(val).toLocaleString("pt-BR");
+}
+
+function MetricCard({ m, i, inView }: { m: typeof METRICS[number]; i: number; inView: boolean }) {
+  const display = useCountUp(m.value, m.decimals ?? 0, 1500 + i * 150, inView);
+  return (
+    <motion.div
+      variants={fadeUp}
+      custom={i}
+      className="group relative flex flex-col items-start gap-2 rounded-2xl border border-border/70 bg-white/60 p-6 backdrop-blur-sm transition-all duration-500 hover:-translate-y-1 hover:border-brand/30 hover:bg-white hover:shadow-[var(--shadow-soft)]"
+    >
+      <div className="absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-brand/40 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+      <div className="flex items-baseline gap-1">
+        <span className="font-display text-4xl font-bold tracking-tight text-foreground md:text-5xl">
+          {display}
+        </span>
+        <span className="font-display text-2xl font-bold text-brand md:text-3xl">{m.suffix}</span>
+      </div>
+      <p className="text-sm font-semibold text-foreground">{m.label}</p>
+      <p className="text-xs text-muted-foreground">{m.hint}</p>
+    </motion.div>
+  );
+}
 
 function SocialProof() {
+  const [inView, setInView] = useState(false);
   return (
-    <section className="border-b border-border bg-white py-10">
-      <p className="mb-6 text-center text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-        Aprovado por mais de 2.000 profissionais em todo o Brasil
-      </p>
-      <div className="relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
-        <div className="flex w-max animate-marquee items-center gap-14 px-6">
-          {LOGOS_ROW.map((l, i) => (
-            <div key={i} className="flex items-center gap-2.5 text-muted-foreground/80">
-              <l.icon className="h-4 w-4" />
-              <span className="font-display text-sm font-semibold tracking-wide">{l.name}</span>
-            </div>
+    <section className="relative overflow-hidden border-b border-border bg-white py-20">
+      {/* glows decorativos */}
+      <div className="pointer-events-none absolute -left-32 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-brand/[0.06] blur-[100px]" />
+      <div className="pointer-events-none absolute -right-32 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-violet-500/[0.05] blur-[100px]" />
+
+      <motion.div
+        initial="hidden"
+        whileInView="show"
+        onViewportEnter={() => setInView(true)}
+        viewport={{ once: true, margin: "-80px" }}
+        className="relative mx-auto max-w-6xl px-6"
+      >
+        <div className="mx-auto mb-14 max-w-2xl text-center">
+          <motion.span
+            variants={fadeUp}
+            className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary/60 px-3.5 py-1.5 text-xs font-medium text-muted-foreground"
+          >
+            <TrendingUp className="h-3.5 w-3.5 text-brand" />
+            Resultados que falam por si
+          </motion.span>
+          <motion.h2
+            variants={fadeUp}
+            custom={1}
+            className="mt-5 font-display text-3xl font-bold leading-[1.15] md:text-4xl"
+          >
+            Negócios reais, <span className="gradient-text">números reais.</span>
+          </motion.h2>
+          <motion.p variants={fadeUp} custom={2} className="mt-3 text-base text-muted-foreground">
+            Mais de 2.000 profissionais já transformaram a rotina da sua agenda.
+          </motion.p>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-5">
+          {METRICS.map((m, i) => (
+            <MetricCard key={m.label} m={m} i={i} inView={inView} />
           ))}
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }
