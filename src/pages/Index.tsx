@@ -859,18 +859,6 @@ function PricingCard({
         )}
       </div>
 
-      {featured && (
-        <motion.span
-          initial={{ opacity: 0, y: -8, scale: 0.9 }}
-          whileInView={{ opacity: 1, y: 0, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.3, duration: 0.5, ease: EASE }}
-          className="absolute -top-3.5 left-1/2 z-10 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-full bg-gradient-to-r from-brand to-orange-500 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white shadow-lg shadow-brand/40 ring-1 ring-white/20"
-        >
-          <Sparkles className="h-3 w-3" />
-          Mais Popular
-        </motion.span>
-      )}
 
       <div className="relative">
         <h3 className="font-display text-xl font-bold">{plan.name}</h3>
