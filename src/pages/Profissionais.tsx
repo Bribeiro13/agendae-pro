@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { AppLayout } from "@/components/layout/AppLayout";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -79,7 +78,7 @@ export default function Profissionais() {
   };
 
   return (
-    <AppLayout>
+    <>
       <div className="mx-auto max-w-5xl space-y-6 animate-fade-in">
         <header className="flex items-center justify-between">
           <div>
@@ -164,6 +163,6 @@ export default function Profissionais() {
           )}
         </Card>
       </div>
-    </AppLayout>
+    </>
   );
 }

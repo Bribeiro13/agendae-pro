@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { AppLayout } from "@/components/layout/AppLayout";
 import { useAuth } from "@/hooks/useAuth";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -23,7 +22,7 @@ export default function LinkPublico() {
   const wppUrl = `https://wa.me/?text=${encodeURIComponent(`Agende seu horário em ${org.nome}: ${url}`)}`;
 
   return (
-    <AppLayout>
+    <>
       <div className="mx-auto max-w-3xl space-y-6 animate-fade-in">
         <header>
           <h1 className="font-display text-3xl font-bold tracking-tight">Link público</h1>
@@ -71,6 +70,6 @@ export default function LinkPublico() {
           </Card>
         </div>
       </div>
-    </AppLayout>
+    </>
   );
 }

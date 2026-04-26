@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState, useCallback } from "react";
-import { AppLayout } from "@/components/layout/AppLayout";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
@@ -80,7 +79,7 @@ export default function Clientes() {
   }, []);
 
   return (
-    <AppLayout>
+    <>
       <div className="mx-auto max-w-5xl space-y-6 animate-fade-in">
         <header>
           <h1 className="font-display text-3xl font-bold tracking-tight">Clientes</h1>
@@ -201,6 +200,6 @@ export default function Clientes() {
           )}
         </SheetContent>
       </Sheet>
-    </AppLayout>
+    </>
   );
 }
