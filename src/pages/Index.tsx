@@ -686,11 +686,20 @@ const HOW_STEPS = [
 
 function HowItWorks() {
   return (
-    <section id="como" className="bg-white py-24">
-      <div className="mx-auto max-w-6xl px-6">
-        <SectionHead title="Como funciona na prática" desc="Um fluxo perfeito que poupa seu tempo e passa profissionalismo para o seu cliente." />
+    <section id="como" className="relative overflow-hidden bg-[hsl(var(--ink))] py-24 text-white">
+      {/* glows decorativos */}
+      <div className="pointer-events-none absolute -left-20 top-10 h-80 w-80 rounded-full bg-brand/20 blur-[120px]" />
+      <div className="pointer-events-none absolute -right-20 bottom-0 h-80 w-80 rounded-full bg-orange-500/10 blur-[120px]" />
+      <div className="pointer-events-none absolute inset-0 bg-grid-faint opacity-30" />
+
+      <div className="relative mx-auto max-w-6xl px-6">
+        <SectionHead
+          title="Como funciona na prática"
+          desc="Um fluxo perfeito que poupa seu tempo e passa profissionalismo para o seu cliente."
+          dark
+        />
         <div className="relative mt-16">
-          <div className="absolute left-0 right-0 top-7 hidden border-t border-dashed border-border md:block" />
+          <div className="absolute left-0 right-0 top-7 hidden border-t border-dashed border-white/15 md:block" />
           <div className="grid grid-cols-1 gap-10 md:grid-cols-4">
             {HOW_STEPS.map((s, i) => (
               <motion.div
@@ -701,11 +710,11 @@ function HowItWorks() {
                 transition={{ duration: 0.5, delay: i * 0.12 }}
                 className="text-center"
               >
-                <div className="relative mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-border bg-white text-brand shadow-[var(--shadow-soft)]">
+                <div className="relative mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-brand shadow-lg shadow-black/20 backdrop-blur">
                   <s.icon className="h-5 w-5" />
                 </div>
-                <h4 className="mt-5 font-display text-sm font-bold">{i + 1}. {s.title}</h4>
-                <p className="mt-1.5 text-sm text-muted-foreground">{s.desc}</p>
+                <h4 className="mt-5 font-display text-sm font-bold text-white">{i + 1}. {s.title}</h4>
+                <p className="mt-1.5 text-sm text-white/60">{s.desc}</p>
               </motion.div>
             ))}
           </div>
