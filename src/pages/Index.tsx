@@ -408,7 +408,7 @@ function Features() {
   );
 }
 
-function SectionHead({ title, desc }: { title: string; desc: string }) {
+function SectionHead({ title, desc, dark = false }: { title: string; desc: string; dark?: boolean }) {
   return (
     <motion.div
       initial="hidden"
@@ -416,8 +416,8 @@ function SectionHead({ title, desc }: { title: string; desc: string }) {
       viewport={{ once: true, margin: "-80px" }}
       className="mx-auto max-w-2xl text-center"
     >
-      <motion.h2 variants={fadeUp} className="font-display text-3xl font-bold md:text-4xl">{title}</motion.h2>
-      <motion.p variants={fadeUp} custom={1} className="mt-3 text-base text-muted-foreground">{desc}</motion.p>
+      <motion.h2 variants={fadeUp} className={`font-display text-3xl font-bold md:text-4xl ${dark ? "text-white" : ""}`}>{title}</motion.h2>
+      <motion.p variants={fadeUp} custom={1} className={`mt-3 text-base ${dark ? "text-white/60" : "text-muted-foreground"}`}>{desc}</motion.p>
     </motion.div>
   );
 }
@@ -686,11 +686,20 @@ const HOW_STEPS = [
 
 function HowItWorks() {
   return (
-    <section id="como" className="bg-white py-24">
-      <div className="mx-auto max-w-6xl px-6">
-        <SectionHead title="Como funciona na prática" desc="Um fluxo perfeito que poupa seu tempo e passa profissionalismo para o seu cliente." />
+    <section id="como" className="relative overflow-hidden bg-[hsl(var(--ink))] py-24 text-white">
+      {/* glows decorativos */}
+      <div className="pointer-events-none absolute -left-20 top-10 h-80 w-80 rounded-full bg-brand/20 blur-[120px]" />
+      <div className="pointer-events-none absolute -right-20 bottom-0 h-80 w-80 rounded-full bg-orange-500/10 blur-[120px]" />
+      <div className="pointer-events-none absolute inset-0 bg-grid-faint opacity-30" />
+
+      <div className="relative mx-auto max-w-6xl px-6">
+        <SectionHead
+          title="Como funciona na prática"
+          desc="Um fluxo perfeito que poupa seu tempo e passa profissionalismo para o seu cliente."
+          dark
+        />
         <div className="relative mt-16">
-          <div className="absolute left-0 right-0 top-7 hidden border-t border-dashed border-border md:block" />
+          <div className="absolute left-0 right-0 top-7 hidden border-t border-dashed border-white/15 md:block" />
           <div className="grid grid-cols-1 gap-10 md:grid-cols-4">
             {HOW_STEPS.map((s, i) => (
               <motion.div
@@ -701,11 +710,11 @@ function HowItWorks() {
                 transition={{ duration: 0.5, delay: i * 0.12 }}
                 className="text-center"
               >
-                <div className="relative mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-border bg-white text-brand shadow-[var(--shadow-soft)]">
+                <div className="relative mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-brand shadow-lg shadow-black/20 backdrop-blur">
                   <s.icon className="h-5 w-5" />
                 </div>
-                <h4 className="mt-5 font-display text-sm font-bold">{i + 1}. {s.title}</h4>
-                <p className="mt-1.5 text-sm text-muted-foreground">{s.desc}</p>
+                <h4 className="mt-5 font-display text-sm font-bold text-white">{i + 1}. {s.title}</h4>
+                <p className="mt-1.5 text-sm text-white/60">{s.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -859,18 +868,6 @@ function PricingCard({
         )}
       </div>
 
-      {featured && (
-        <motion.span
-          initial={{ opacity: 0, y: -8, scale: 0.9 }}
-          whileInView={{ opacity: 1, y: 0, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.3, duration: 0.5, ease: EASE }}
-          className="absolute -top-3.5 left-1/2 z-10 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-full bg-gradient-to-r from-brand to-orange-500 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white shadow-lg shadow-brand/40 ring-1 ring-white/20"
-        >
-          <Sparkles className="h-3 w-3" />
-          Mais Popular
-        </motion.span>
-      )}
 
       <div className="relative">
         <h3 className="font-display text-xl font-bold">{plan.name}</h3>
@@ -1034,29 +1031,120 @@ function Faq() {
 
 /* ---------- CTA ---------- */
 function Cta({ destino }: { destino: string }) {
+  const [pos, setPos] = useState({ x: 50, y: 50 });
+  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    setPos({ x: ((e.clientX - r.left) / r.width) * 100, y: ((e.clientY - r.top) / r.height) * 100 });
+  };
+
   return (
     <section className="bg-white py-20">
       <div className="mx-auto max-w-5xl px-6">
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 28 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="relative overflow-hidden rounded-3xl bg-[hsl(var(--ink))] px-8 py-16 text-center text-white md:px-16"
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.7, ease: EASE }}
+          onMouseMove={onMove}
+          whileHover={{ y: -4 }}
+          className="group relative overflow-hidden rounded-3xl border border-white/10 bg-[hsl(var(--ink))] px-8 py-16 text-center text-white shadow-[var(--shadow-card-lg)] md:px-16"
         >
+          {/* glows base */}
           <div className="pointer-events-none absolute -left-20 -top-20 h-72 w-72 rounded-full bg-brand/30 blur-[100px]" />
           <div className="pointer-events-none absolute -right-10 -bottom-20 h-72 w-72 rounded-full bg-orange-500/20 blur-[100px]" />
-          <h2 className="relative font-display text-3xl font-extrabold md:text-4xl">
-            Pronto para nunca mais perder um horário?
-          </h2>
-          <p className="relative mx-auto mt-3 max-w-xl text-white/70">
+          <div className="pointer-events-none absolute inset-0 bg-grid-faint opacity-20" />
+
+          {/* spotlight cursor */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+            style={{
+              background: `radial-gradient(500px circle at ${pos.x}% ${pos.y}%, hsl(var(--brand) / 0.22), transparent 60%)`,
+            }}
+          />
+
+          {/* shimmer line */}
+          <motion.div
+            aria-hidden
+            initial={{ x: "-120%" }}
+            whileInView={{ x: "120%" }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.6, delay: 0.4, ease: EASE }}
+            className="pointer-events-none absolute inset-y-0 left-0 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/10 to-transparent"
+          />
+
+          {/* sparkle badge */}
+          <motion.div
+            initial={{ opacity: 0, y: -10, scale: 0.9 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className="relative mx-auto mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-xs font-medium text-white/80 backdrop-blur"
+          >
+            <Sparkles className="h-3.5 w-3.5 text-brand" />
+            Comece em menos de 2 minutos
+          </motion.div>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="relative font-display text-3xl font-extrabold leading-tight md:text-5xl"
+          >
+            Pronto para nunca mais{" "}
+            <span className="relative inline-block">
+              <span className="bg-gradient-to-r from-brand to-orange-400 bg-clip-text text-transparent">perder um horário?</span>
+              <motion.span
+                aria-hidden
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: 0.7, ease: EASE }}
+                className="absolute -bottom-1 left-0 h-[3px] w-full origin-left rounded-full bg-gradient-to-r from-brand to-orange-400"
+              />
+            </span>
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.35 }}
+            className="relative mx-auto mt-5 max-w-xl text-white/70"
+          >
             Comece grátis hoje. Sem cartão, sem fidelidade. Só uma agenda que finalmente funciona.
-          </p>
-          <div className="relative mt-8">
-            <Button asChild size="lg" className="rounded-full bg-brand px-7 py-6 text-base font-semibold shadow-[var(--shadow-brand)] hover:bg-brand/90">
-              <Link to={destino}>Começar agora <ArrowRight className="ml-1 h-4 w-4" /></Link>
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.45 }}
+            className="relative mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row"
+          >
+            <Button
+              asChild
+              size="lg"
+              className="group/btn relative overflow-hidden rounded-full bg-brand px-8 py-6 text-base font-semibold text-white shadow-[var(--shadow-brand)] transition-transform duration-300 hover:scale-[1.03] hover:bg-brand"
+            >
+              <Link to={destino}>
+                <span className="relative z-10 inline-flex items-center">
+                  Começar agora
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
+                </span>
+                <span
+                  aria-hidden
+                  className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover/btn:translate-x-full"
+                />
+              </Link>
             </Button>
-          </div>
+
+            <div className="flex items-center gap-4 text-xs text-white/50">
+              <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-brand" /> Sem cartão</span>
+              <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-brand" /> Cancele quando quiser</span>
+            </div>
+          </motion.div>
         </motion.div>
       </div>
     </section>
