@@ -408,7 +408,7 @@ function Features() {
   );
 }
 
-function SectionHead({ title, desc }: { title: string; desc: string }) {
+function SectionHead({ title, desc, dark = false }: { title: string; desc: string; dark?: boolean }) {
   return (
     <motion.div
       initial="hidden"
@@ -416,8 +416,8 @@ function SectionHead({ title, desc }: { title: string; desc: string }) {
       viewport={{ once: true, margin: "-80px" }}
       className="mx-auto max-w-2xl text-center"
     >
-      <motion.h2 variants={fadeUp} className="font-display text-3xl font-bold md:text-4xl">{title}</motion.h2>
-      <motion.p variants={fadeUp} custom={1} className="mt-3 text-base text-muted-foreground">{desc}</motion.p>
+      <motion.h2 variants={fadeUp} className={`font-display text-3xl font-bold md:text-4xl ${dark ? "text-white" : ""}`}>{title}</motion.h2>
+      <motion.p variants={fadeUp} custom={1} className={`mt-3 text-base ${dark ? "text-white/60" : "text-muted-foreground"}`}>{desc}</motion.p>
     </motion.div>
   );
 }
