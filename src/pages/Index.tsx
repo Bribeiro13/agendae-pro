@@ -108,15 +108,7 @@ const Hero = memo(function Hero({ destino, reduce }: { destino: string; reduce: 
 
       <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-14 px-6 lg:grid-cols-2">
         <div>
-          <motion.span
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-xs font-medium text-white/80 backdrop-blur"
-          >
-            <Sparkles className="h-3.5 w-3.5 text-brand" />
-            Feito para Clínicas e Barbearias
-          </motion.span>
+          {/* badge removida a pedido */}
 
           <motion.h1
             initial="hidden"
