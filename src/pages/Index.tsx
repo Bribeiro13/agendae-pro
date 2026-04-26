@@ -852,28 +852,28 @@ function PricingCard({
         transition: "transform 0.5s cubic-bezier(0.22,1,0.36,1), box-shadow 0.5s",
       }}
     >
-      {/* spotlight glow following the cursor */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-        style={{
-          background: featured
-            ? `radial-gradient(420px circle at ${pos.x}% ${pos.y}%, hsl(var(--brand) / 0.18), transparent 60%)`
-            : `radial-gradient(420px circle at ${pos.x}% ${pos.y}%, hsl(var(--brand) / 0.10), transparent 55%)`,
-        }}
-      />
-      {/* gradient ring on featured */}
-      {featured && (
-        <div aria-hidden className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-inset ring-white/5" />
-      )}
+      {/* spotlight glow following the cursor (clipped to card) */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden rounded-3xl">
+        <div
+          className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+          style={{
+            background: featured
+              ? `radial-gradient(420px circle at ${pos.x}% ${pos.y}%, hsl(var(--brand) / 0.18), transparent 60%)`
+              : `radial-gradient(420px circle at ${pos.x}% ${pos.y}%, hsl(var(--brand) / 0.10), transparent 55%)`,
+          }}
+        />
+        {featured && (
+          <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-inset ring-white/5" />
+        )}
+      </div>
 
       {featured && (
         <motion.span
-          initial={{ opacity: 0, y: -8 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: -8, scale: 0.9 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3, duration: 0.5, ease: EASE }}
-          className="absolute -top-3 left-1/2 flex -translate-x-1/2 items-center gap-1 rounded-full bg-brand px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-lg shadow-brand/30"
+          className="absolute -top-3.5 left-1/2 z-10 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-full bg-gradient-to-r from-brand to-orange-500 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white shadow-lg shadow-brand/40 ring-1 ring-white/20"
         >
           <Sparkles className="h-3 w-3" />
           Mais Popular
