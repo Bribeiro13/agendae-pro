@@ -768,7 +768,8 @@ function Testimonials() {
 /* ---------- Pricing ---------- */
 const PLANS = [
   {
-    name: "Essencial", desc: "Para o profissional autônomo", price: "39", cta: "Assinar Essencial", featured: false,
+    name: "Essencial", desc: "Para o profissional autônomo",
+    monthly: 39, yearly: 31, cta: "Assinar Essencial", featured: false,
     features: [
       { ok: true,  t: "1 Profissional" },
       { ok: true,  t: "Agendamentos ilimitados" },
@@ -778,7 +779,8 @@ const PLANS = [
     ],
   },
   {
-    name: "Profissional", desc: "O pacote completo para crescer", price: "79", cta: "Assinar Profissional", featured: true,
+    name: "Profissional", desc: "O pacote completo para crescer",
+    monthly: 79, yearly: 63, cta: "Assinar Profissional", featured: true,
     features: [
       { ok: true, t: "Até 3 Profissionais" },
       { ok: true, t: "Tudo do plano Essencial" },
@@ -788,7 +790,8 @@ const PLANS = [
     ],
   },
   {
-    name: "Estúdio", desc: "Para times maiores e clínicas", price: "149", cta: "Assinar Estúdio", featured: false,
+    name: "Estúdio", desc: "Para times maiores e clínicas",
+    monthly: 149, yearly: 119, cta: "Assinar Estúdio", featured: false,
     features: [
       { ok: true, t: "Profissionais ilimitados" },
       { ok: true, t: "Tudo do plano Profissional" },
@@ -799,51 +802,195 @@ const PLANS = [
   },
 ];
 
-function Pricing({ destino }: { destino: string }) {
+function PriceNumber({ value, featured }: { value: number; featured: boolean }) {
   return (
-    <section id="planos" className="bg-white py-24">
-      <div className="mx-auto max-w-6xl px-6">
-        <SectionHead title="Preço simples. Sem surpresas." desc="Escolha o plano ideal para o tamanho do seu negócio. Cancele quando quiser." />
-        <div className="mt-14 grid grid-cols-1 gap-5 md:grid-cols-3">
-          {PLANS.map((p, i) => (
-            <motion.div
-              key={p.name}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.55, delay: i * 0.1 }}
-              whileHover={{ y: -6 }}
-              className={`relative rounded-3xl border p-7 ${p.featured ? "border-transparent bg-[hsl(var(--ink))] text-white shadow-[var(--shadow-card-lg)]" : "border-border bg-white shadow-[var(--shadow-soft)]"}`}
+    <div className="flex items-baseline gap-1 overflow-hidden">
+      <span className={`font-display text-5xl font-extrabold ${featured ? "text-white" : "text-[hsl(var(--ink))]"}`}>
+        R$&nbsp;
+      </span>
+      <motion.span
+        key={value}
+        initial={{ y: 24, opacity: 0, filter: "blur(6px)" }}
+        animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+        transition={{ duration: 0.45, ease: EASE }}
+        className={`font-display text-5xl font-extrabold tabular-nums ${featured ? "text-white" : "text-[hsl(var(--ink))]"}`}
+      >
+        {value}
+      </motion.span>
+      <span className={`ml-1 text-sm ${featured ? "text-white/60" : "text-muted-foreground"}`}>/mês</span>
+    </div>
+  );
+}
+
+function PricingCard({
+  plan, billing, destino, index,
+}: {
+  plan: typeof PLANS[number]; billing: "monthly" | "yearly"; destino: string; index: number;
+}) {
+  const [pos, setPos] = useState({ x: 50, y: 50 });
+  const price = billing === "yearly" ? plan.yearly : plan.monthly;
+  const featured = plan.featured;
+
+  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    setPos({ x: ((e.clientX - r.left) / r.width) * 100, y: ((e.clientY - r.top) / r.height) * 100 });
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.6, delay: index * 0.1, ease: EASE }}
+      whileHover={{ y: -8 }}
+      onMouseMove={onMove}
+      className={`group relative overflow-hidden rounded-3xl border p-8 transition-shadow duration-500
+        ${featured
+          ? "border-white/10 bg-[hsl(var(--ink))] text-white shadow-[var(--shadow-card-lg)] md:scale-[1.03]"
+          : "border-border bg-white shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-card-lg)]"}`}
+      style={{
+        transition: "transform 0.5s cubic-bezier(0.22,1,0.36,1), box-shadow 0.5s",
+      }}
+    >
+      {/* spotlight glow following the cursor */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+        style={{
+          background: featured
+            ? `radial-gradient(420px circle at ${pos.x}% ${pos.y}%, hsl(var(--brand) / 0.18), transparent 60%)`
+            : `radial-gradient(420px circle at ${pos.x}% ${pos.y}%, hsl(var(--brand) / 0.10), transparent 55%)`,
+        }}
+      />
+      {/* gradient ring on featured */}
+      {featured && (
+        <div aria-hidden className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-inset ring-white/5" />
+      )}
+
+      {featured && (
+        <motion.span
+          initial={{ opacity: 0, y: -8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3, duration: 0.5, ease: EASE }}
+          className="absolute -top-3 left-1/2 flex -translate-x-1/2 items-center gap-1 rounded-full bg-brand px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-lg shadow-brand/30"
+        >
+          <Sparkles className="h-3 w-3" />
+          Mais Popular
+        </motion.span>
+      )}
+
+      <div className="relative">
+        <h3 className="font-display text-xl font-bold">{plan.name}</h3>
+        <p className={`mt-1 text-sm ${featured ? "text-white/60" : "text-muted-foreground"}`}>{plan.desc}</p>
+
+        <div className="mt-7">
+          <PriceNumber value={price} featured={featured} />
+          {billing === "yearly" && (
+            <motion.p
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 }}
+              className={`mt-1 text-xs ${featured ? "text-brand" : "text-emerald-600"}`}
             >
-              {p.featured && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-brand px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white">Mais Popular</span>
+              Economize 20% no plano anual
+            </motion.p>
+          )}
+        </div>
+
+        <ul className="mt-7 space-y-3">
+          {plan.features.map((f, i) => (
+            <motion.li
+              key={f.t}
+              initial={{ opacity: 0, x: -8 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 + i * 0.05, duration: 0.4, ease: EASE }}
+              className="flex items-center gap-2.5 text-sm"
+            >
+              {f.ok ? (
+                <span className={`flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full ${featured ? "bg-brand/20 text-brand" : "bg-emerald-50 text-emerald-600"}`}>
+                  <Check className="h-3 w-3" strokeWidth={3} />
+                </span>
+              ) : (
+                <span className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground/60">
+                  <X className="h-3 w-3" strokeWidth={3} />
+                </span>
               )}
-              <h3 className="font-display text-xl font-bold">{p.name}</h3>
-              <p className={`mt-1 text-sm ${p.featured ? "text-white/60" : "text-muted-foreground"}`}>{p.desc}</p>
-              <div className="mt-6 flex items-baseline gap-1">
-                <span className="font-display text-4xl font-extrabold">R$ {p.price}</span>
-                <span className={`text-sm ${p.featured ? "text-white/60" : "text-muted-foreground"}`}>/mês</span>
-              </div>
-              <ul className="mt-6 space-y-3">
-                {p.features.map((f) => (
-                  <li key={f.t} className="flex items-center gap-2.5 text-sm">
-                    {f.ok
-                      ? <Check className={`h-4 w-4 flex-shrink-0 ${p.featured ? "text-brand" : "text-emerald-600"}`} />
-                      : <X className={`h-4 w-4 flex-shrink-0 ${p.featured ? "text-white/30" : "text-muted-foreground/50"}`} />
-                    }
-                    <span className={!f.ok ? "text-muted-foreground line-through opacity-70" : ""}>{f.t}</span>
-                  </li>
-                ))}
-              </ul>
-              <Button
-                asChild
-                className={`mt-7 w-full rounded-full ${p.featured ? "bg-brand text-white hover:bg-brand/90" : "bg-secondary text-foreground hover:bg-muted"}`}
-              >
-                <Link to={destino}>{p.cta}</Link>
-              </Button>
-            </motion.div>
+              <span className={!f.ok ? "text-muted-foreground line-through opacity-70" : ""}>{f.t}</span>
+            </motion.li>
+          ))}
+        </ul>
+
+        <Button
+          asChild
+          className={`mt-8 w-full rounded-full transition-all duration-300
+            ${featured
+              ? "bg-brand text-white shadow-lg shadow-brand/30 hover:bg-brand/90 hover:shadow-xl hover:shadow-brand/40"
+              : "bg-secondary text-foreground hover:bg-[hsl(var(--ink))] hover:text-white"}`}
+        >
+          <Link to={destino} className="group/btn flex items-center justify-center gap-2">
+            {plan.cta}
+            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
+          </Link>
+        </Button>
+      </div>
+    </motion.div>
+  );
+}
+
+function Pricing({ destino }: { destino: string }) {
+  const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
+
+  return (
+    <section id="planos" className="relative overflow-hidden bg-white py-24">
+      {/* subtle decorative glows */}
+      <div aria-hidden className="pointer-events-none absolute -top-40 left-1/2 h-[420px] w-[680px] -translate-x-1/2 rounded-full bg-brand/[0.05] blur-3xl" />
+      <div aria-hidden className="pointer-events-none absolute bottom-0 right-0 h-[300px] w-[500px] rounded-full bg-brand/[0.04] blur-3xl" />
+
+      <div className="relative mx-auto max-w-6xl px-6">
+        <SectionHead title="Preço simples. Sem surpresas." desc="Escolha o plano ideal para o tamanho do seu negócio. Cancele quando quiser." />
+
+        {/* Billing toggle */}
+        <div className="mt-10 flex justify-center">
+          <div className="relative inline-flex items-center rounded-full border border-border bg-white p-1 shadow-[var(--shadow-soft)]">
+            {(["monthly", "yearly"] as const).map((b) => {
+              const active = billing === b;
+              return (
+                <button
+                  key={b}
+                  type="button"
+                  onClick={() => setBilling(b)}
+                  className={`relative z-10 rounded-full px-5 py-2 text-sm font-medium transition-colors duration-300 ${active ? "text-white" : "text-muted-foreground hover:text-foreground"}`}
+                >
+                  {active && (
+                    <motion.span
+                      layoutId="billing-pill"
+                      transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                      className="absolute inset-0 -z-10 rounded-full bg-[hsl(var(--ink))]"
+                    />
+                  )}
+                  <span className="flex items-center gap-2">
+                    {b === "monthly" ? "Mensal" : "Anual"}
+                    {b === "yearly" && (
+                      <span className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold ${active ? "bg-brand text-white" : "bg-brand/10 text-brand"}`}>-20%</span>
+                    )}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="mt-12 grid grid-cols-1 items-stretch gap-6 md:grid-cols-3">
+          {PLANS.map((p, i) => (
+            <PricingCard key={p.name} plan={p} billing={billing} destino={destino} index={i} />
           ))}
         </div>
+
+        <p className="mt-8 text-center text-xs text-muted-foreground">
+          Sem fidelidade • Cancele quando quiser • Suporte humano em português
+        </p>
       </div>
     </section>
   );
