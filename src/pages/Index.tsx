@@ -844,7 +844,7 @@ function PricingCard({
       transition={{ duration: 0.6, delay: index * 0.1, ease: EASE }}
       whileHover={{ y: -8 }}
       onMouseMove={onMove}
-      className={`group relative overflow-hidden rounded-3xl border p-8 transition-shadow duration-500
+      className={`group relative rounded-3xl border p-8 transition-shadow duration-500
         ${featured
           ? "border-white/10 bg-[hsl(var(--ink))] text-white shadow-[var(--shadow-card-lg)] md:scale-[1.03]"
           : "border-border bg-white shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-card-lg)]"}`}
