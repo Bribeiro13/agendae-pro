@@ -108,15 +108,7 @@ const Hero = memo(function Hero({ destino, reduce }: { destino: string; reduce: 
 
       <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-14 px-6 lg:grid-cols-2">
         <div>
-          <motion.span
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-xs font-medium text-white/80 backdrop-blur"
-          >
-            <Sparkles className="h-3.5 w-3.5 text-brand" />
-            Feito para Clínicas e Barbearias
-          </motion.span>
+          {/* badge removida a pedido */}
 
           <motion.h1
             initial="hidden"
@@ -844,7 +836,7 @@ function PricingCard({
       transition={{ duration: 0.6, delay: index * 0.1, ease: EASE }}
       whileHover={{ y: -8 }}
       onMouseMove={onMove}
-      className={`group relative overflow-hidden rounded-3xl border p-8 transition-shadow duration-500
+      className={`group relative rounded-3xl border p-8 transition-shadow duration-500
         ${featured
           ? "border-white/10 bg-[hsl(var(--ink))] text-white shadow-[var(--shadow-card-lg)] md:scale-[1.03]"
           : "border-border bg-white shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-card-lg)]"}`}
@@ -852,28 +844,28 @@ function PricingCard({
         transition: "transform 0.5s cubic-bezier(0.22,1,0.36,1), box-shadow 0.5s",
       }}
     >
-      {/* spotlight glow following the cursor */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-        style={{
-          background: featured
-            ? `radial-gradient(420px circle at ${pos.x}% ${pos.y}%, hsl(var(--brand) / 0.18), transparent 60%)`
-            : `radial-gradient(420px circle at ${pos.x}% ${pos.y}%, hsl(var(--brand) / 0.10), transparent 55%)`,
-        }}
-      />
-      {/* gradient ring on featured */}
-      {featured && (
-        <div aria-hidden className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-inset ring-white/5" />
-      )}
+      {/* spotlight glow following the cursor (clipped to card) */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden rounded-3xl">
+        <div
+          className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+          style={{
+            background: featured
+              ? `radial-gradient(420px circle at ${pos.x}% ${pos.y}%, hsl(var(--brand) / 0.18), transparent 60%)`
+              : `radial-gradient(420px circle at ${pos.x}% ${pos.y}%, hsl(var(--brand) / 0.10), transparent 55%)`,
+          }}
+        />
+        {featured && (
+          <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-inset ring-white/5" />
+        )}
+      </div>
 
       {featured && (
         <motion.span
-          initial={{ opacity: 0, y: -8 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: -8, scale: 0.9 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3, duration: 0.5, ease: EASE }}
-          className="absolute -top-3 left-1/2 flex -translate-x-1/2 items-center gap-1 rounded-full bg-brand px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-lg shadow-brand/30"
+          className="absolute -top-3.5 left-1/2 z-10 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-full bg-gradient-to-r from-brand to-orange-500 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white shadow-lg shadow-brand/40 ring-1 ring-white/20"
         >
           <Sparkles className="h-3 w-3" />
           Mais Popular
@@ -1073,18 +1065,118 @@ function Cta({ destino }: { destino: string }) {
 
 /* ---------- Footer ---------- */
 function Footer() {
+  const year = new Date().getFullYear();
+
+  const handleNav = (id: string) => (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
-    <footer className="border-t border-border bg-white py-10">
-      <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 md:flex-row">
-        <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand">
-            <CalendarDays className="h-4 w-4 text-white" strokeWidth={2.5} />
+    <footer className="relative overflow-hidden bg-[hsl(var(--ink))] text-white/80">
+      {/* glows decorativos */}
+      <div className="pointer-events-none absolute -left-20 top-0 h-72 w-72 rounded-full bg-brand/20 blur-[120px]" />
+      <div className="pointer-events-none absolute -right-20 bottom-0 h-72 w-72 rounded-full bg-orange-500/10 blur-[120px]" />
+      <div className="pointer-events-none absolute inset-0 bg-grid-faint opacity-30" />
+
+      <div className="relative mx-auto max-w-7xl px-6 pb-10 pt-16">
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-12">
+          {/* Brand */}
+          <div className="md:col-span-5">
+            <div className="flex items-center gap-2.5">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand shadow-lg shadow-brand/30">
+                <CalendarDays className="h-5 w-5 text-white" strokeWidth={2.5} />
+              </div>
+              <span className="font-display text-lg font-bold text-white">Agendae</span>
+            </div>
+            <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/60">
+              A agenda inteligente que organiza seus horários, cobra pelo Pix e envia lembretes
+              automáticos no WhatsApp — para você focar no que importa.
+            </p>
+
+            <div className="mt-6 flex items-center gap-3">
+              <a
+                href="#"
+                aria-label="Instagram"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/70 transition hover:border-brand/60 hover:bg-brand/10 hover:text-brand"
+              >
+                <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="3" y="3" width="18" height="18" rx="5" />
+                  <circle cx="12" cy="12" r="4" />
+                  <circle cx="17.5" cy="6.5" r="1" fill="currentColor" />
+                </svg>
+              </a>
+              <a
+                href="#"
+                aria-label="WhatsApp"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/70 transition hover:border-brand/60 hover:bg-brand/10 hover:text-brand"
+              >
+                <MessageCircle className="h-4 w-4" />
+              </a>
+              <a
+                href="mailto:contato@agendae.com"
+                aria-label="Email"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/70 transition hover:border-brand/60 hover:bg-brand/10 hover:text-brand"
+              >
+                <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="3" y="5" width="18" height="14" rx="2" />
+                  <path d="m3 7 9 6 9-6" />
+                </svg>
+              </a>
+            </div>
           </div>
-          <span className="font-display text-sm font-bold">Agendae</span>
+
+          {/* Produto */}
+          <div className="md:col-span-3">
+            <h4 className="text-xs font-semibold uppercase tracking-[0.14em] text-white/50">Produto</h4>
+            <ul className="mt-4 space-y-2.5 text-sm">
+              <li><a href="#features" onClick={handleNav("features")} className="text-white/70 transition hover:text-brand">Funcionalidades</a></li>
+              <li><a href="#how" onClick={handleNav("how")} className="text-white/70 transition hover:text-brand">Como funciona</a></li>
+              <li><a href="#pricing" onClick={handleNav("pricing")} className="text-white/70 transition hover:text-brand">Planos e preços</a></li>
+              <li><a href="#faq" onClick={handleNav("faq")} className="text-white/70 transition hover:text-brand">Perguntas frequentes</a></li>
+            </ul>
+          </div>
+
+          {/* Empresa */}
+          <div className="md:col-span-4">
+            <h4 className="text-xs font-semibold uppercase tracking-[0.14em] text-white/50">Fique por dentro</h4>
+            <p className="mt-4 text-sm text-white/60">
+              Receba dicas de gestão e novidades da plataforma.
+            </p>
+            <form
+              onSubmit={(e) => e.preventDefault()}
+              className="mt-4 flex items-center gap-2 rounded-full border border-white/10 bg-white/5 p-1 pl-4 backdrop-blur transition focus-within:border-brand/60"
+            >
+              <input
+                type="email"
+                placeholder="seu@email.com"
+                className="flex-1 bg-transparent text-sm text-white placeholder:text-white/40 focus:outline-none"
+              />
+              <button
+                type="submit"
+                className="flex h-8 items-center gap-1 rounded-full bg-brand px-3.5 text-xs font-semibold text-white transition hover:bg-brand/90"
+              >
+                Inscrever
+                <ArrowRight className="h-3.5 w-3.5" />
+              </button>
+            </form>
+          </div>
         </div>
-        <p className="text-xs text-muted-foreground">
-          © {new Date().getFullYear()} Agendae · Micro-SaaS de agendamento para o Brasil
-        </p>
+
+        {/* Divider */}
+        <div className="mt-14 h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+        {/* Bottom */}
+        <div className="mt-6 flex flex-col items-center justify-between gap-3 md:flex-row">
+          <p className="text-xs text-white/50">
+            © {year} Agendae · Feito com <span className="text-brand">♥</span> para o Brasil
+          </p>
+          <div className="flex items-center gap-5 text-xs text-white/50">
+            <a href="#" className="transition hover:text-white">Termos</a>
+            <a href="#" className="transition hover:text-white">Privacidade</a>
+            <a href="#" className="transition hover:text-white">Contato</a>
+          </div>
+        </div>
       </div>
     </footer>
   );
