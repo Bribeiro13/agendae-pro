@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { AppLayout } from "@/components/layout/AppLayout";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -48,7 +47,7 @@ export default function Configuracoes() {
   };
 
   return (
-    <AppLayout>
+    <>
       <div className="mx-auto max-w-3xl space-y-6 animate-fade-in">
         <header>
           <h1 className="font-display text-3xl font-bold tracking-tight">Configurações</h1>
@@ -110,6 +109,6 @@ export default function Configuracoes() {
           </div>
         </Card>
       </div>
-    </AppLayout>
+    </>
   );
 }
