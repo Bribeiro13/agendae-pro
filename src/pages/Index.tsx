@@ -1065,18 +1065,118 @@ function Cta({ destino }: { destino: string }) {
 
 /* ---------- Footer ---------- */
 function Footer() {
+  const year = new Date().getFullYear();
+
+  const handleNav = (id: string) => (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
-    <footer className="border-t border-border bg-white py-10">
-      <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 md:flex-row">
-        <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand">
-            <CalendarDays className="h-4 w-4 text-white" strokeWidth={2.5} />
+    <footer className="relative overflow-hidden bg-[hsl(var(--ink))] text-white/80">
+      {/* glows decorativos */}
+      <div className="pointer-events-none absolute -left-20 top-0 h-72 w-72 rounded-full bg-brand/20 blur-[120px]" />
+      <div className="pointer-events-none absolute -right-20 bottom-0 h-72 w-72 rounded-full bg-orange-500/10 blur-[120px]" />
+      <div className="pointer-events-none absolute inset-0 bg-grid-faint opacity-30" />
+
+      <div className="relative mx-auto max-w-7xl px-6 pb-10 pt-16">
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-12">
+          {/* Brand */}
+          <div className="md:col-span-5">
+            <div className="flex items-center gap-2.5">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand shadow-lg shadow-brand/30">
+                <CalendarDays className="h-5 w-5 text-white" strokeWidth={2.5} />
+              </div>
+              <span className="font-display text-lg font-bold text-white">Agendae</span>
+            </div>
+            <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/60">
+              A agenda inteligente que organiza seus horários, cobra pelo Pix e envia lembretes
+              automáticos no WhatsApp — para você focar no que importa.
+            </p>
+
+            <div className="mt-6 flex items-center gap-3">
+              <a
+                href="#"
+                aria-label="Instagram"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/70 transition hover:border-brand/60 hover:bg-brand/10 hover:text-brand"
+              >
+                <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="3" y="3" width="18" height="18" rx="5" />
+                  <circle cx="12" cy="12" r="4" />
+                  <circle cx="17.5" cy="6.5" r="1" fill="currentColor" />
+                </svg>
+              </a>
+              <a
+                href="#"
+                aria-label="WhatsApp"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/70 transition hover:border-brand/60 hover:bg-brand/10 hover:text-brand"
+              >
+                <MessageCircle className="h-4 w-4" />
+              </a>
+              <a
+                href="mailto:contato@agendae.com"
+                aria-label="Email"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/70 transition hover:border-brand/60 hover:bg-brand/10 hover:text-brand"
+              >
+                <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="3" y="5" width="18" height="14" rx="2" />
+                  <path d="m3 7 9 6 9-6" />
+                </svg>
+              </a>
+            </div>
           </div>
-          <span className="font-display text-sm font-bold">Agendae</span>
+
+          {/* Produto */}
+          <div className="md:col-span-3">
+            <h4 className="text-xs font-semibold uppercase tracking-[0.14em] text-white/50">Produto</h4>
+            <ul className="mt-4 space-y-2.5 text-sm">
+              <li><a href="#features" onClick={handleNav("features")} className="text-white/70 transition hover:text-brand">Funcionalidades</a></li>
+              <li><a href="#how" onClick={handleNav("how")} className="text-white/70 transition hover:text-brand">Como funciona</a></li>
+              <li><a href="#pricing" onClick={handleNav("pricing")} className="text-white/70 transition hover:text-brand">Planos e preços</a></li>
+              <li><a href="#faq" onClick={handleNav("faq")} className="text-white/70 transition hover:text-brand">Perguntas frequentes</a></li>
+            </ul>
+          </div>
+
+          {/* Empresa */}
+          <div className="md:col-span-4">
+            <h4 className="text-xs font-semibold uppercase tracking-[0.14em] text-white/50">Fique por dentro</h4>
+            <p className="mt-4 text-sm text-white/60">
+              Receba dicas de gestão e novidades da plataforma.
+            </p>
+            <form
+              onSubmit={(e) => e.preventDefault()}
+              className="mt-4 flex items-center gap-2 rounded-full border border-white/10 bg-white/5 p-1 pl-4 backdrop-blur transition focus-within:border-brand/60"
+            >
+              <input
+                type="email"
+                placeholder="seu@email.com"
+                className="flex-1 bg-transparent text-sm text-white placeholder:text-white/40 focus:outline-none"
+              />
+              <button
+                type="submit"
+                className="flex h-8 items-center gap-1 rounded-full bg-brand px-3.5 text-xs font-semibold text-white transition hover:bg-brand/90"
+              >
+                Inscrever
+                <ArrowRight className="h-3.5 w-3.5" />
+              </button>
+            </form>
+          </div>
         </div>
-        <p className="text-xs text-muted-foreground">
-          © {new Date().getFullYear()} Agendae · Micro-SaaS de agendamento para o Brasil
-        </p>
+
+        {/* Divider */}
+        <div className="mt-14 h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+        {/* Bottom */}
+        <div className="mt-6 flex flex-col items-center justify-between gap-3 md:flex-row">
+          <p className="text-xs text-white/50">
+            © {year} Agendae · Feito com <span className="text-brand">♥</span> para o Brasil
+          </p>
+          <div className="flex items-center gap-5 text-xs text-white/50">
+            <a href="#" className="transition hover:text-white">Termos</a>
+            <a href="#" className="transition hover:text-white">Privacidade</a>
+            <a href="#" className="transition hover:text-white">Contato</a>
+          </div>
+        </div>
       </div>
     </footer>
   );
