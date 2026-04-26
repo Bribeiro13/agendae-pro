@@ -699,22 +699,100 @@ function HowItWorks() {
           dark
         />
         <div className="relative mt-16">
-          <div className="absolute left-0 right-0 top-7 hidden border-t border-dashed border-white/15 md:block" />
+          {/* linha tracejada de fundo */}
+          <div className="absolute left-0 right-0 top-7 hidden border-t border-dashed border-white/10 md:block" />
+          {/* linha animada por cima (preenche conforme entra na viewport) */}
+          <motion.div
+            aria-hidden
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 1.4, ease: EASE, delay: 0.2 }}
+            style={{ transformOrigin: "left" }}
+            className="absolute left-0 right-0 top-7 hidden h-px bg-gradient-to-r from-brand via-orange-400 to-transparent md:block"
+          />
+
           <div className="grid grid-cols-1 gap-10 md:grid-cols-4">
             {HOW_STEPS.map((s, i) => (
               <motion.div
                 key={s.title}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.12 }}
-                className="text-center"
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.55, delay: i * 0.18, ease: EASE }}
+                className="group relative text-center"
               >
-                <div className="relative mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-brand shadow-lg shadow-black/20 backdrop-blur">
-                  <s.icon className="h-5 w-5" />
-                </div>
-                <h4 className="mt-5 font-display text-sm font-bold text-white">{i + 1}. {s.title}</h4>
-                <p className="mt-1.5 text-sm text-white/60">{s.desc}</p>
+                {/* halo pulsante atrás do ícone */}
+                <motion.div
+                  aria-hidden
+                  className="pointer-events-none absolute left-1/2 top-0 h-14 w-14 -translate-x-1/2 rounded-2xl bg-brand/30 blur-xl"
+                  animate={{ opacity: [0.25, 0.6, 0.25], scale: [0.9, 1.15, 0.9] }}
+                  transition={{ duration: 3, repeat: Infinity, delay: i * 0.4, ease: "easeInOut" }}
+                />
+
+                {/* ícone com hover interativo */}
+                <motion.div
+                  whileHover={{ y: -6, rotate: -4, scale: 1.08 }}
+                  transition={{ type: "spring", stiffness: 280, damping: 14 }}
+                  className="relative mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-brand shadow-lg shadow-black/30 backdrop-blur transition-colors duration-300 group-hover:border-brand/60 group-hover:bg-brand/10"
+                >
+                  {/* ring que orbita ao hover */}
+                  <span
+                    aria-hidden
+                    className="absolute inset-0 rounded-2xl ring-1 ring-brand/0 transition-all duration-500 group-hover:ring-2 group-hover:ring-brand/40 group-hover:ring-offset-2 group-hover:ring-offset-[hsl(var(--ink))]"
+                  />
+                  <s.icon className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
+
+                  {/* badge numerado animado */}
+                  <motion.span
+                    initial={{ scale: 0, opacity: 0 }}
+                    whileInView={{ scale: 1, opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.4 + i * 0.18, type: "spring", stiffness: 320, damping: 16 }}
+                    className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-brand to-orange-500 text-[11px] font-bold text-white shadow-lg shadow-brand/40 ring-2 ring-[hsl(var(--ink))]"
+                  >
+                    {i + 1}
+                  </motion.span>
+                </motion.div>
+
+                <motion.h4
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: 0.25 + i * 0.18 }}
+                  className="mt-5 font-display text-sm font-bold text-white transition-colors duration-300 group-hover:text-brand"
+                >
+                  {s.title}
+                </motion.h4>
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: 0.32 + i * 0.18 }}
+                  className="mt-1.5 text-sm text-white/60"
+                >
+                  {s.desc}
+                </motion.p>
+
+                {/* seta entre os passos (apenas desktop, não no último) */}
+                {i < HOW_STEPS.length - 1 && (
+                  <motion.div
+                    aria-hidden
+                    initial={{ opacity: 0, x: -8 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.6 + i * 0.18, duration: 0.5 }}
+                    className="absolute right-0 top-6 hidden translate-x-1/2 text-brand/70 md:block"
+                  >
+                    <motion.span
+                      animate={{ x: [0, 4, 0] }}
+                      transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
+                      className="inline-flex"
+                    >
+                      <ArrowRight className="h-4 w-4" />
+                    </motion.span>
+                  </motion.div>
+                )}
               </motion.div>
             ))}
           </div>
