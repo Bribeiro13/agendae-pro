@@ -62,9 +62,9 @@ const Navbar = memo(function Navbar({ destino, user }: { destino: string; user: 
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,padding] duration-200 ease-out will-change-[background-color] ${
+      className={`fixed inset-x-0 top-0 z-50 transition-[background-color,backdrop-filter,border-color,padding] duration-300 ease-out ${
         scrolled
-          ? "border-b border-white/5 bg-[hsl(var(--ink))]/90"
+          ? "border-b border-white/5 bg-[hsl(var(--ink))]/40 backdrop-blur-md supports-[backdrop-filter]:bg-[hsl(var(--ink))]/25"
           : "border-b border-transparent bg-transparent"
       }`}
     >
