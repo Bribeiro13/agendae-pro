@@ -53,44 +53,23 @@ const Navbar = memo(function Navbar({ destino, user }: { destino: string; user: 
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    let ticking = false;
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        setScrolled(window.scrollY > 24);
-        ticking = false;
-      });
-    };
-    // adia montagem para não competir com o first paint
-    const idle = (cb: () => void) =>
-      "requestIdleCallback" in window
-        ? (window as any).requestIdleCallback(cb, { timeout: 500 })
-        : setTimeout(cb, 200);
-    let cleanup = () => {};
-    const handle = idle(() => {
-      onScroll();
-      window.addEventListener("scroll", onScroll, { passive: true });
-      cleanup = () => window.removeEventListener("scroll", onScroll);
-    });
-    return () => {
-      cleanup();
-      if ("cancelIdleCallback" in window) (window as any).cancelIdleCallback(handle);
-      else clearTimeout(handle as any);
-    };
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    // passive: true melhora performance de scroll no mobile
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
     <header
-      style={{ transform: "translateZ(0)", contain: "layout paint" }}
-      className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color] duration-200 ease-out ${
+      className={`fixed inset-x-0 top-0 z-50 transition-[background-color,backdrop-filter,border-color,padding] duration-300 ease-out ${
         scrolled
-          ? "border-b border-white/5 bg-[hsl(var(--ink))]/85"
-          : "border-b border-transparent bg-[hsl(var(--ink))]/0"
+          ? "border-b border-white/5 bg-[hsl(var(--ink))]/40 backdrop-blur-md supports-[backdrop-filter]:bg-[hsl(var(--ink))]/25"
+          : "border-b border-transparent bg-transparent"
       }`}
     >
       <div
-        className={`mx-auto flex max-w-7xl items-center justify-between px-6 text-white transition-[padding] duration-200 ease-out ${
+        className={`mx-auto flex max-w-7xl items-center justify-between px-6 text-white transition-[padding] duration-300 ease-out ${
           scrolled ? "py-3" : "py-5"
         }`}
       >
