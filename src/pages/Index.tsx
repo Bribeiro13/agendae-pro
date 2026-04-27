@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useState, Suspense, lazy } from "react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
+import { Reveal } from "@/components/Reveal";
 import {
   CalendarDays, MessageCircle, QrCode, Smartphone, Clock, CreditCard,
   CheckCircle2, ArrowRight, Star, Check, X,
