@@ -62,14 +62,14 @@ const Navbar = memo(function Navbar({ destino, user }: { destino: string; user: 
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ease-out ${
+      className={`fixed inset-x-0 top-0 z-50 transition-[background-color,backdrop-filter,border-color,padding] duration-300 ease-out ${
         scrolled
-          ? "border-b border-white/5 bg-[hsl(var(--ink))]/25 backdrop-blur-xl supports-[backdrop-filter]:bg-[hsl(var(--ink))]/15"
+          ? "border-b border-white/5 bg-[hsl(var(--ink))]/40 backdrop-blur-md supports-[backdrop-filter]:bg-[hsl(var(--ink))]/25"
           : "border-b border-transparent bg-transparent"
       }`}
     >
       <div
-        className={`mx-auto flex max-w-7xl items-center justify-between px-6 text-white transition-all duration-500 ease-out ${
+        className={`mx-auto flex max-w-7xl items-center justify-between px-6 text-white transition-[padding] duration-300 ease-out ${
           scrolled ? "py-3" : "py-5"
         }`}
       >
@@ -80,16 +80,16 @@ const Navbar = memo(function Navbar({ destino, user }: { destino: string; user: 
           <span className="font-display text-lg font-bold tracking-tight">Agendae</span>
         </Link>
         <nav className="hidden items-center gap-8 text-sm text-white/70 md:flex">
-          <a href="#recursos" className="transition hover:text-white">Recursos</a>
-          <a href="#como"     className="transition hover:text-white">Como Funciona</a>
-          <a href="#planos"   className="transition hover:text-white">Planos</a>
-          <a href="#faq"      className="transition hover:text-white">FAQ</a>
+          <a href="#recursos" className="transition-colors duration-150 hover:text-white">Recursos</a>
+          <a href="#como"     className="transition-colors duration-150 hover:text-white">Como Funciona</a>
+          <a href="#planos"   className="transition-colors duration-150 hover:text-white">Planos</a>
+          <a href="#faq"      className="transition-colors duration-150 hover:text-white">FAQ</a>
         </nav>
         <div className="flex items-center gap-3">
-          <Link to="/auth" className="hidden text-sm text-white/80 transition hover:text-white sm:inline">
+          <Link to="/auth" className="hidden text-sm text-white/80 transition-colors duration-150 hover:text-white sm:inline">
             {user ? "Painel" : "Entrar"}
           </Link>
-          <Button asChild className="rounded-full bg-brand px-4 text-white shadow-[var(--shadow-brand)] hover:bg-brand/90">
+          <Button asChild className="rounded-full bg-brand px-4 text-white shadow-[var(--shadow-brand)] transition-colors duration-150 hover:bg-brand/90">
             <Link to={destino}>Teste Grátis</Link>
           </Button>
         </div>
