@@ -178,3 +178,10 @@
   to { transform: translateX(-50%); }
 }
 .animate-marquee { animation: marquee 28s linear infinite; }
+
+/* Performance: pula renderização de seções fora do viewport até estarem visíveis.
+   Reduz custo de layout/paint em landing pages longas. */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 800px;
+}
