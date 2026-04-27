@@ -34,14 +34,15 @@ export default function Index() {
     <div className="min-h-screen bg-white text-[hsl(var(--ink))]">
       <Navbar destino={destino} user={!!user} />
       <Hero destino={destino} reduce={!!reduce} />
-      <SocialProof />
-      <Features />
-      <HowItWorks />
-      <Testimonials />
-      <Pricing destino={destino} />
-      <Faq />
-      <Cta destino={destino} />
-      <Footer />
+
+      <Reveal direction="up" className="cv-auto"><SocialProof /></Reveal>
+      <Reveal direction="up" delay={60} className="cv-auto"><Features /></Reveal>
+      <Reveal direction="zoom" className="cv-auto"><HowItWorks /></Reveal>
+      <Reveal direction="up" className="cv-auto"><Testimonials /></Reveal>
+      <Reveal direction="up" className="cv-auto"><Pricing destino={destino} /></Reveal>
+      <Reveal direction="up" className="cv-auto"><Faq /></Reveal>
+      <Reveal direction="zoom" className="cv-auto"><Cta destino={destino} /></Reveal>
+      <Reveal direction="fade" className="cv-auto"><Footer /></Reveal>
     </div>
   );
 }
