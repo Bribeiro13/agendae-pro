@@ -1,4 +1,4 @@
-import { Calendar, LayoutDashboard, Users, Scissors, UserCog, Link2, Settings, LogOut, Sparkles } from "lucide-react";
+import { Calendar, LayoutDashboard, Users, Scissors, UserCog, Link2, Settings, LogOut, Sparkles, CreditCard } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
@@ -18,6 +18,7 @@ const itensGestao = [
   { titulo: "Serviços", url: "/app/servicos", icon: Scissors },
   { titulo: "Profissionais", url: "/app/profissionais", icon: UserCog },
   { titulo: "Link público", url: "/app/link-publico", icon: Link2 },
+  { titulo: "Planos", url: "/app/billing", icon: CreditCard },
   { titulo: "Configurações", url: "/app/configuracoes", icon: Settings },
 ];
 

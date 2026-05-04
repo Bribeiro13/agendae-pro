@@ -22,6 +22,7 @@ const Servicos     = lazy(() => import("./pages/Servicos"));
 const Clientes     = lazy(() => import("./pages/Clientes"));
 const Configuracoes = lazy(() => import("./pages/Configuracoes"));
 const LinkPublico  = lazy(() => import("./pages/LinkPublico"));
+const Billing      = lazy(() => import("./pages/Billing"));
 const ReservaPublica = lazy(() => import("./pages/ReservaPublica"));
 const NotFound     = lazy(() => import("./pages/NotFound"));
 
@@ -69,6 +70,7 @@ const AnimatedRoutes = () => {
         <Route path="/app/profissionais"  element={<AppLayout><Suspense fallback={<PageLoader />}>{wrap(<Profissionais />)}</Suspense></AppLayout>} />
         <Route path="/app/link-publico"   element={<AppLayout><Suspense fallback={<PageLoader />}>{wrap(<LinkPublico />)}</Suspense></AppLayout>} />
         <Route path="/app/configuracoes"  element={<AppLayout><Suspense fallback={<PageLoader />}>{wrap(<Configuracoes />)}</Suspense></AppLayout>} />
+        <Route path="/app/billing"        element={<AppLayout><Suspense fallback={<PageLoader />}>{wrap(<Billing />)}</Suspense></AppLayout>} />
 
         <Route path="*" element={<Suspense fallback={<PageLoader />}>{wrap(<NotFound />)}</Suspense>} />
       </Routes>

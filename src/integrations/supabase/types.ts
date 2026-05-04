@@ -141,7 +141,11 @@ export type Database = {
           minutos_expiracao_pix: number
           nome: string
           percentual_sinal: number
+          plano: Database["public"]["Enums"]["plano_assinatura"]
+          plano_expira_em: string | null
           slug: string
+          status_assinatura: Database["public"]["Enums"]["status_assinatura"]
+          stripe_customer_id: string | null
           telefone: string | null
         }
         Insert: {
@@ -152,7 +156,11 @@ export type Database = {
           minutos_expiracao_pix?: number
           nome: string
           percentual_sinal?: number
+          plano?: Database["public"]["Enums"]["plano_assinatura"]
+          plano_expira_em?: string | null
           slug: string
+          status_assinatura?: Database["public"]["Enums"]["status_assinatura"]
+          stripe_customer_id?: string | null
           telefone?: string | null
         }
         Update: {
@@ -163,7 +171,11 @@ export type Database = {
           minutos_expiracao_pix?: number
           nome?: string
           percentual_sinal?: number
+          plano?: Database["public"]["Enums"]["plano_assinatura"]
+          plano_expira_em?: string | null
           slug?: string
+          status_assinatura?: Database["public"]["Enums"]["status_assinatura"]
+          stripe_customer_id?: string | null
           telefone?: string | null
         }
         Relationships: []
@@ -338,6 +350,53 @@ export type Database = {
           },
         ]
       }
+      subscriptions: {
+        Row: {
+          atualizado_em: string
+          criado_em: string
+          data_expiracao: string | null
+          data_inicio: string
+          id: string
+          organizacao_id: string
+          origem: string
+          plano: Database["public"]["Enums"]["plano_assinatura"]
+          status: Database["public"]["Enums"]["status_assinatura"]
+          stripe_subscription_id: string | null
+        }
+        Insert: {
+          atualizado_em?: string
+          criado_em?: string
+          data_expiracao?: string | null
+          data_inicio?: string
+          id?: string
+          organizacao_id: string
+          origem?: string
+          plano: Database["public"]["Enums"]["plano_assinatura"]
+          status?: Database["public"]["Enums"]["status_assinatura"]
+          stripe_subscription_id?: string | null
+        }
+        Update: {
+          atualizado_em?: string
+          criado_em?: string
+          data_expiracao?: string | null
+          data_inicio?: string
+          id?: string
+          organizacao_id?: string
+          origem?: string
+          plano?: Database["public"]["Enums"]["plano_assinatura"]
+          status?: Database["public"]["Enums"]["status_assinatura"]
+          stripe_subscription_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_organizacao_id_fkey"
+            columns: ["organizacao_id"]
+            isOneToOne: false
+            referencedRelation: "organizacoes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           criado_em: string
@@ -393,6 +452,10 @@ export type Database = {
         Args: { _organizacao_id: string; _user_id: string }
         Returns: boolean
       }
+      pode_acessar: {
+        Args: { _feature: string; _organizacao_id: string }
+        Returns: boolean
+      }
       reservar_horario_publico: {
         Args: {
           _cliente_email: string
@@ -404,6 +467,18 @@ export type Database = {
           _servico_id: string
         }
         Returns: Json
+      }
+      simular_cancelamento: {
+        Args: { _organizacao_id: string }
+        Returns: undefined
+      }
+      simular_pagamento: {
+        Args: {
+          _dias?: number
+          _organizacao_id: string
+          _plano: Database["public"]["Enums"]["plano_assinatura"]
+        }
+        Returns: string
       }
       tem_conflito_horario: {
         Args: {
@@ -417,12 +492,19 @@ export type Database = {
     }
     Enums: {
       app_role: "dono" | "funcionario"
+      plano_assinatura: "free" | "pro" | "premium"
       status_agendamento:
         | "pendente"
         | "confirmado"
         | "pago"
         | "cancelado"
         | "concluido"
+        | "expirado"
+      status_assinatura:
+        | "inativo"
+        | "ativo"
+        | "cancelado"
+        | "inadimplente"
         | "expirado"
       status_pagamento: "aguardando" | "pago" | "expirado" | "cancelado"
     }
@@ -553,12 +635,20 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["dono", "funcionario"],
+      plano_assinatura: ["free", "pro", "premium"],
       status_agendamento: [
         "pendente",
         "confirmado",
         "pago",
         "cancelado",
         "concluido",
+        "expirado",
+      ],
+      status_assinatura: [
+        "inativo",
+        "ativo",
+        "cancelado",
+        "inadimplente",
         "expirado",
       ],
       status_pagamento: ["aguardando", "pago", "expirado", "cancelado"],
